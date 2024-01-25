@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ButtonsView">
+        <attr name="buttonSize" format="dimension" />
+
+        <attr name="buttonPressedBackground" format="reference" />
+        <attr name="buttonReleasedBackground" format="reference" />
+
+        <attr name="buttonTopForeground" format="reference" />
+        <attr name="buttonBottomForeground" format="reference" />
+        <attr name="buttonLeftForeground" format="reference" />
+        <attr name="buttonRightForeground" format="reference" />
+    </declare-styleable>
+</resources>

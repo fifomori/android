@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WebViewActivity">
+
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.cafeed28.omori.ButtonsView
+        android:id="@+id/dpad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="64dp"
+        app:buttonPressedBackground="@drawable/button_pressed"
+        app:buttonReleasedBackground="@drawable/button_released"
+        app:buttonSize="56dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.cafeed28.omori.ButtonsView
+        android:id="@+id/buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="64dp"
+        app:buttonBottomForeground="@drawable/button_b"
+        app:buttonLeftForeground="@drawable/button_y"
+        app:buttonPressedBackground="@drawable/button_pressed"
+        app:buttonReleasedBackground="@drawable/button_released"
+        app:buttonRightForeground="@drawable/button_a"
+        app:buttonSize="56dp"
+        app:buttonTopForeground="@drawable/button_x"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
