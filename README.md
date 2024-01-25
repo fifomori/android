@@ -1,6 +1,4 @@
-# 
-
-OMORI for Android
+# OMORI for Android
 
 ![spacexh_happy](.github/assets/spacexh_happy.png)
 
