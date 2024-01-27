@@ -2,7 +2,6 @@ package com.cafeed28.omori;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.webkit.WebView;
@@ -10,10 +9,6 @@ import android.webkit.WebView;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
-
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 public class WebViewActivity extends Activity {
     private WebView mWebView;
@@ -37,13 +32,7 @@ public class WebViewActivity extends Activity {
 
         mWebView = findViewById(R.id.webView);
         mWebViewHelper = new WebViewHelper(mWebView, this);
-
-        Map<String, String> noCacheHeaders = new HashMap<>(2);
-        noCacheHeaders.put("Pragma", "no-cache");
-        noCacheHeaders.put("Cache-Control", "no-cache");
-
-        File file = new File(SettingsActivity.directory + "/index.html");
-        mWebView.loadUrl(Uri.fromFile(file).toString(), noCacheHeaders);
+        mWebViewHelper.start();
 
         ((ButtonsView) findViewById(R.id.dpad)).setButtonsListener((button, pressed) -> {
             mWebViewHelper.dispatchButton(button + 12, pressed);
