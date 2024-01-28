@@ -38,3 +38,7 @@ To use OneLoader, enable it in `OMORI - Settings` app and install [OneLoader](ht
 
 1. Build [nwcompat](https://github.com/fifomori/nwcompat)
 1. Build in Android Studio
+
+# Credits
+
+See [nwcompat](https://github.com/fifomori/nwcompat#credits)
