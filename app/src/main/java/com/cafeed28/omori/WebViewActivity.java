@@ -83,9 +83,4 @@ public class WebViewActivity extends Activity {
 
         super.onPause();
     }
-
-    @Override
-    public void onBackPressed() {
-        mWebView.evaluateJavascript("TouchInput._onCancel()", null);
-    }
 }

@@ -1,12 +1,16 @@
 package com.cafeed28.omori;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.text.InputType;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -30,6 +34,14 @@ public class SettingsActivity extends AppCompatActivity {
 
     private static SharedPreferences preferences;
 
+    private boolean isExternalStorageManager() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            return Environment.isExternalStorageManager();
+        } else {
+            return checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        }
+    }
+
     ActivityResultLauncher<Uri> mOpenDocumentTree = registerForActivityResult(new ActivityResultContracts.OpenDocumentTree(), uri -> {
         if (uri != null) {
             String[] pathSections = uri.getPath().split(":");
@@ -42,9 +54,15 @@ public class SettingsActivity extends AppCompatActivity {
         }
     });
 
-    ActivityResultLauncher<Intent> mRequestStoragePermission = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-        if (!Environment.isExternalStorageManager()) {
-            Toast.makeText(SettingsActivity.this, "Storage permission is required", Toast.LENGTH_LONG).show();
+    ActivityResultLauncher<Intent> mStartActivityForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (!isExternalStorageManager()) {
+            Toast.makeText(this, "Storage permission is required", Toast.LENGTH_LONG).show();
+        }
+    });
+
+    ActivityResultLauncher<String> mRequestPermission = registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
+        if (!granted) {
+            Toast.makeText(this, "Storage permission is required", Toast.LENGTH_LONG).show();
         }
     });
 
@@ -53,12 +71,16 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        if (!Environment.isExternalStorageManager()) {
-            Toast.makeText(SettingsActivity.this, "Allow storage permission", Toast.LENGTH_LONG).show();
-            mRequestStoragePermission.launch(
-                    new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
-                            Uri.parse("package:" + BuildConfig.APPLICATION_ID))
-            );
+        if (!isExternalStorageManager()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                Toast.makeText(this, "Allow storage permission", Toast.LENGTH_LONG).show();
+                mStartActivityForResult.launch(
+                        new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
+                                Uri.parse("package:" + BuildConfig.APPLICATION_ID))
+                );
+            } else {
+                mRequestPermission.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
         }
 
         preferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);

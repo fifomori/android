@@ -48,8 +48,8 @@ public class NwCompatPathHandler {
         try {
             return Files.newInputStream(Paths.get(SettingsActivity.directory, path));
         } catch (IOException e) {
-            if (e instanceof NoSuchFileException) {
-                Log.d(TAG, String.format("handleGamePath: file not found: '%s'", path));
+            if (!(e instanceof NoSuchFileException)) {
+                e.printStackTrace();
             }
         }
         return null;
@@ -95,7 +95,10 @@ public class NwCompatPathHandler {
         } else {
             is = handleAsset(path);
             if (is == null) is = handleGame(path);
-            if (is == null) return null;
+            if (is == null) {
+                Log.d(TAG, String.format("file not found: '%s' ('%s')", path, SettingsActivity.directory));
+                return null;
+            }
         }
 
         return new WebResourceResponse(getMimeType(path), null, is);
