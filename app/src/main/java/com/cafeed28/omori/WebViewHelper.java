@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContextWrapper;
 import android.net.Uri;
+import android.util.Log;
 import android.view.View;
+import android.webkit.ConsoleMessage;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
@@ -97,6 +99,31 @@ public class WebViewHelper {
         public void onCloseWindow(WebView window) {
             mActivity.finishAndRemoveTask();
             super.onCloseWindow(window);
+        }
+
+        @Override
+        public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
+            var message = consoleMessage.message();
+
+            if (BuildConfig.DEBUG) {
+                switch (consoleMessage.messageLevel()) {
+                    case ERROR: // error
+                        Log.e("Console", message + "\n  from " + consoleMessage.sourceId() + ":" + consoleMessage.lineNumber());
+                        break;
+                    case WARNING: // warn
+                        Log.w("Console", message);
+                        break;
+                    case LOG: // info, log
+                        Log.i("Console", message);
+                        break;
+                    case TIP: // debug
+                    case DEBUG: // ?
+                        Log.d("Console", message);
+                        break;
+                }
+            }
+
+            return true;
         }
     }
 }

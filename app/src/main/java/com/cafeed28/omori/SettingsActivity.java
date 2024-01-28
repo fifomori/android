@@ -16,14 +16,17 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 public class SettingsActivity extends AppCompatActivity {
     public static final String SHARED_PREFERENCES = "Preferences";
     public static final String DIRECTORY = "directory";
     public static final String KEY = "key";
+    public static final String ONELOADER = "oneloader";
 
     public static String directory;
     public static String key;
+    public static boolean oneloader;
 
     private static SharedPreferences preferences;
 
@@ -73,16 +76,21 @@ public class SettingsActivity extends AppCompatActivity {
 
         findViewById(R.id.dirButton).setOnClickListener(view -> mOpenDocumentTree.launch(null));
         findViewById(R.id.keyButton).setOnClickListener(view -> dialog.show());
+        ((SwitchCompat) findViewById(R.id.oneloaderSwitch)).setOnCheckedChangeListener((v, checked) -> preferences.edit().putBoolean(ONELOADER, checked).apply());
     }
 
     private void updateDisplay() {
         ((TextView) findViewById(R.id.dirTextView)).setText(preferences.getString(DIRECTORY, "Select OMORI directory"));
+        ((SwitchCompat) findViewById(R.id.oneloaderSwitch)).setChecked(preferences.getBoolean(ONELOADER, false));
     }
 
     public static boolean initPreferences(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
+
         directory = preferences.getString(DIRECTORY, null);
         key = preferences.getString(KEY, null);
+        oneloader = preferences.getBoolean(ONELOADER, false);
+
         return (directory != null && !directory.isEmpty()) && (key != null && !key.isEmpty());
     }
 }

@@ -31,3 +31,6 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+app/src/main/assets/*
+!app/src/main/assets/index*.html

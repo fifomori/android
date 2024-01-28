@@ -35,4 +35,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dirButton" />
 
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/oneloaderSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/keyButton" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="3dp"
+        android:text="Enable OneLoader"
+        app:layout_constraintStart_toEndOf="@+id/oneloaderSwitch"
+        app:layout_constraintTop_toTopOf="@+id/oneloaderSwitch" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
