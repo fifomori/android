@@ -23,11 +23,6 @@ public class WebViewActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!SettingsActivity.initPreferences(this)) {
-            startActivity(new Intent(this, SettingsActivity.class));
-            finish();
-            return;
-        }
         setContentView(R.layout.activity_webview);
 
         mWebView = findViewById(R.id.webView);
@@ -82,5 +77,10 @@ public class WebViewActivity extends Activity {
         }
 
         super.onPause();
+    }
+
+    @Override
+    public void onBackPressed() {
+        // super.onBackPressed();
     }
 }

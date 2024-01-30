@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:key="@string/preference_directory"
+        android:title="Select installation directory" />
+    <EditTextPreference
+        android:key="@string/preference_key"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="Enter decryption key" />
+    <SwitchPreference
+        android:defaultValue="false"
+        android:dependency="@string/preference_directory"
+        android:key="@string/preference_oneloader"
+        android:title="Enable OneLoader" />
+</PreferenceScreen>

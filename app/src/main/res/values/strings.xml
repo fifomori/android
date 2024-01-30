@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">OMORI</string>
-    <string name="app_settings_name">OMORI - Settings</string>
+
+    <string name="preference_key">key</string>
+    <string name="preference_directory">directory</string>
+    <string name="preference_oneloader">oneloader</string>
 </resources>

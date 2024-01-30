@@ -22,6 +22,7 @@ import java.util.List;
 public class NwCompatPathHandler {
     private final String TAG = this.getClass().getSimpleName();
     private final Activity mActivity;
+    private final String mDirectory;
 
     private static final List<String> mOneLoaderBlockList = Arrays.asList(
             "js/libs/pixi.js",
@@ -29,8 +30,9 @@ public class NwCompatPathHandler {
             "js/libs/pixi-picture.js"
     );
 
-    public NwCompatPathHandler(Activity activity) {
+    public NwCompatPathHandler(Activity activity, String directory) {
         mActivity = activity;
+        mDirectory = directory;
     }
 
     private static String getMimeType(@NonNull String path) {
@@ -46,7 +48,7 @@ public class NwCompatPathHandler {
     @Nullable
     private InputStream handleGame(String path) {
         try {
-            return Files.newInputStream(Paths.get(SettingsActivity.directory, path));
+            return Files.newInputStream(Paths.get(mDirectory, path));
         } catch (IOException e) {
             if (!(e instanceof NoSuchFileException)) {
                 e.printStackTrace();
@@ -61,7 +63,7 @@ public class NwCompatPathHandler {
 
         if (BuildConfig.DEBUG) {
             try {
-                is = Files.newInputStream(Paths.get(SettingsActivity.directory, "assets", path));
+                is = Files.newInputStream(Paths.get(mDirectory, "assets", path));
             } catch (IOException e) {
                 if (!(e instanceof NoSuchFileException)) {
                     e.printStackTrace();
@@ -82,9 +84,9 @@ public class NwCompatPathHandler {
         return is;
     }
 
-    public WebResourceResponse handle(String path) {
+    public WebResourceResponse handle(String path, boolean oneLoader) {
         boolean block = false;
-        if (SettingsActivity.oneloader) {
+        if (oneLoader) {
             block = mOneLoaderBlockList.contains(path);
             path = path.replace("index.html", "index-oneloader.html");
         }
@@ -96,7 +98,7 @@ public class NwCompatPathHandler {
             is = handleAsset(path);
             if (is == null) is = handleGame(path);
             if (is == null) {
-                Log.d(TAG, String.format("file not found: '%s' ('%s')", path, SettingsActivity.directory));
+                Log.d(TAG, String.format("file not found: '%s' ('%s')", path, mDirectory));
                 return null;
             }
         }

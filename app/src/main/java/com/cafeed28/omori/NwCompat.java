@@ -12,10 +12,15 @@ import java.util.List;
 
 public class NwCompat {
     public static final String INTERFACE = "nwcompat";
-    private final String mDataDirectory;
 
-    public NwCompat(String dataDirectory) {
+    private final String mDataDirectory;
+    private final String mGameDirectory;
+    private final String mKey;
+
+    public NwCompat(String dataDirectory, String gameDirectory, String key) {
         mDataDirectory = dataDirectory;
+        mGameDirectory = gameDirectory;
+        mKey = key;
     }
 
     @JavascriptInterface
@@ -25,12 +30,12 @@ public class NwCompat {
 
     @JavascriptInterface
     public String getGameDirectory() {
-        return SettingsActivity.directory;
+        return mGameDirectory;
     }
 
     @JavascriptInterface
     public String getKey() {
-        return SettingsActivity.key;
+        return mKey;
     }
 
     /**

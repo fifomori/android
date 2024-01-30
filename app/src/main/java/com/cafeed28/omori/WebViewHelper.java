@@ -3,6 +3,7 @@ package com.cafeed28.omori;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContextWrapper;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +15,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.preference.PreferenceManager;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,14 +24,25 @@ public class WebViewHelper {
     private final WebView mView;
     private final Activity mActivity;
 
+    private final String mDataDirectory;
+    private final String mGameDirectory;
+    private final String mKey;
+    private final boolean mOneLoader;
+
     @SuppressLint("SetJavaScriptEnabled")
     public WebViewHelper(WebView view, Activity activity) {
         mView = view;
         mActivity = activity;
 
         ContextWrapper contextWrapper = new ContextWrapper(activity);
-        String dataDir = contextWrapper.getFilesDir().getPath();
-        mView.addJavascriptInterface(new NwCompat(dataDir), NwCompat.INTERFACE);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+
+        mDataDirectory = contextWrapper.getFilesDir().getPath();
+        mGameDirectory = preferences.getString(activity.getString(R.string.preference_directory), null);
+        mKey = preferences.getString(activity.getString(R.string.preference_key), null);
+        mOneLoader = preferences.getBoolean(activity.getString(R.string.preference_oneloader), false);
+
+        mView.addJavascriptInterface(new NwCompat(mDataDirectory, mGameDirectory, mKey), NwCompat.INTERFACE);
 
         mView.setWebViewClient(new ViewClient());
         mView.setWebChromeClient(new ChromeClient());
@@ -72,7 +86,7 @@ public class WebViewHelper {
     }
 
     private class ViewClient extends WebViewClient {
-        private final NwCompatPathHandler mPathHandler = new NwCompatPathHandler(mActivity);
+        private final NwCompatPathHandler mPathHandler = new NwCompatPathHandler(mActivity, mGameDirectory);
 
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
@@ -86,7 +100,7 @@ public class WebViewHelper {
                     if (!decodedPath.contains("\0")) path = decodedPath;
                 }
 
-                return mPathHandler.handle(path);
+                return mPathHandler.handle(path, mOneLoader);
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
