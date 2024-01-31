@@ -1,3 +1,5 @@
+Languages: [русский](README_ru.md)
+
 # OMORI for Android
 
 ![spacexh_happy](.github/assets/spacexh_happy.png)
@@ -11,10 +13,9 @@ Android WebView + [nwcompat](https://github.com/fifomori/nwcompat)
 # Installing
 
 1. Get and install APK
-1. Copy installed OMORI from Steam to your phone
-1. Run OMORI on your phone for first time
-   - Select OMORI directory and [enter key](#get-a-key)
-1. Now you can run OMORI normally
+2. Copy installed OMORI from Steam to your phone
+3. Run app on your phone for first time, select game directory (из пункта 2) and [enter key](#get-a-key)
+4. Now you can run game normally
 
 # Get a key
 
@@ -30,15 +31,13 @@ wmic process where caption='OMORI.exe' get commandline | findstr .*--6
 
 # OneLoader
 
-To use OneLoader, enable it in `OMORI - Settings` app and install [OneLoader](https://mods.one/mod/oneloader) to your OMORI directory
+To use OneLoader, [install](https://mods.one/mod/oneloader) it to your OMORI directory and enable it in settings
 
 **IMPORTANT**: see [chromori](https://github.com/fifomori/chromori#oneloader-)
 
 # Building
 
 1. Build [nwcompat](https://github.com/fifomori/nwcompat)
-1. Build in Android Studio
+2. Build in Android Studio
 
-# Credits
-
-See [nwcompat](https://github.com/fifomori/nwcompat#credits)
+# [Credits](https://github.com/fifomori/nwcompat#credits)
