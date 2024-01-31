@@ -13,7 +13,7 @@ Android WebView + [nwcompat](https://github.com/fifomori/nwcompat)
 # Installing
 
 1. Get and install APK
-2. Copy installed OMORI from Steam to your phone
+2. Copy `www` folder from your OMORI installation to your phone
 3. Run app on your phone for first time, select game directory (step 2) and [enter key](#get-a-key)
 4. Now you can run game normally
 
