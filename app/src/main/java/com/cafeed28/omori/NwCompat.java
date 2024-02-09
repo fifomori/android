@@ -1,26 +1,66 @@
 package com.cafeed28.omori;
 
+import android.util.Log;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 public class NwCompat {
     public static final String INTERFACE = "nwcompat";
 
+    private final WebView mView;
     private final String mDataDirectory;
     private final String mGameDirectory;
     private final String mKey;
 
-    public NwCompat(String dataDirectory, String gameDirectory, String key) {
+    private final Base64.Decoder mDecoder = Base64.getDecoder();
+    private final Base64.Encoder mEncoder = Base64.getEncoder();
+
+    public NwCompat(WebView view, String dataDirectory, String gameDirectory, String key) {
+        mView = view;
         mDataDirectory = dataDirectory;
         mGameDirectory = gameDirectory;
         mKey = key;
+    }
+
+    @JavascriptInterface
+    public void asyncCall(int id, String methodName, String args) {
+        NwCompat self = this;
+
+        new Thread(() -> {
+            try {
+                JSONObject params = new JSONObject(args);
+                String result = (String) self.getClass().getMethod(methodName, JSONObject.class).invoke(self, params);
+                self.jsResolve(id, true, result);
+            } catch (InvocationTargetException ite) {
+                self.jsResolve(id, false, ite.getCause().toString());
+            } catch (Exception e) {
+                self.jsResolve(id, false, e.toString());
+            }
+        }).start();
+    }
+
+    private void jsResolve(int id, boolean success, String result) {
+        var formattedResult = result == null ? "null" : String.format("\"%s\"", result);
+        var code = String.format("nwcompat.async.callback(%d, %b, %s)", id, success, formattedResult);
+        Log.d("Promise", code);
+        mView.post(() -> mView.evaluateJavascript(code, null));
+    }
+
+    public String fsReadFileAsync(JSONObject args) throws JSONException {
+        return fsReadFile(args.getString("path"));
     }
 
     @JavascriptInterface
@@ -72,7 +112,8 @@ public class NwCompat {
     @JavascriptInterface
     public String fsReadFile(String path) {
         try {
-            return Base64.encode(Files.readAllBytes(Paths.get(path)));
+            var bytes = Files.readAllBytes(Paths.get(path));
+            return mEncoder.encodeToString(bytes);
         } catch (IOException e) {
             if (!(e instanceof NoSuchFileException)) {
                 e.printStackTrace();

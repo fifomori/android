@@ -42,7 +42,7 @@ public class WebViewHelper {
         mKey = preferences.getString(activity.getString(R.string.preference_key), null);
         mOneLoader = preferences.getBoolean(activity.getString(R.string.preference_oneloader), false);
 
-        mView.addJavascriptInterface(new NwCompat(mDataDirectory, mGameDirectory, mKey), NwCompat.INTERFACE);
+        mView.addJavascriptInterface(new NwCompat(mView, mDataDirectory, mGameDirectory, mKey), NwCompat.INTERFACE);
 
         mView.setWebViewClient(new ViewClient());
         mView.setWebChromeClient(new ChromeClient());
