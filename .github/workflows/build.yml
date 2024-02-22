@@ -66,9 +66,10 @@ jobs:
         -Pandroid.injected.signing.store.password="$STORE_PASSWORD" \
         -Pandroid.injected.signing.key.alias=key0 \
         -Pandroid.injected.signing.key.password="$KEY_PASSWORD"
+        ls -R app/build/outputs/apk
 
     - name: Upload apk
       uses: actions/upload-artifact@v4
       with:
         name: app-debug.apk
-        path: app/build/outputs/apk/release/app-debug.apk
+        path: app/build/outputs/apk/debug/app-debug.apk
