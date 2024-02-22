@@ -51,29 +51,24 @@ jobs:
       run: |
         cp nwcompat/nwcompat.js nwcompat/nwcompat-loader.js nwcompat/dist/* android/app/src/main/assets
 
-    - name: Setup keystore
-      uses: mobiledevops/secret-to-file-action@v1
-      with:
-        base64-encoded-secret: ${{ secrets.KEYSTORE }}
-        filename: keystore
-        working-directory: '.'
-
     - name: Debug
       run: echo " == $(pwd)" && ls && echo ' == assets' && ls android/app/src/main/assets && env
 
     - name: Build apk
       env:
+        STORE_FILE: ${{ secrets.KEYSTORE }}
         STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
         KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       run: |
         cd android
         echo $GITHUB_WORKSPACE
         ls $GITHUB_WORKSPACE
+        echo $STORE_FILE | base64 -d > $GITHUB_WORKSPACE/keystore
         ./gradlew assembleDebug --no-configuration-cache --no-daemon
-        -Pandroid.injected.signing.store.file="$GITHUB_WORKSPACE/keystore"
-        -Pandroid.injected.signing.store.password="$STORE_PASSWORD"
-        -Pandroid.injected.signing.key.alias="key0"
-        -Pandroid.injected.signing.key.password="$KEY_PASSWORD"
+        -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/keystore
+        -Pandroid.injected.signing.store.password=$STORE_PASSWORD
+        -Pandroid.injected.signing.key.alias=key0
+        -Pandroid.injected.signing.key.password=$KEY_PASSWORD
 
     - name: Upload apk
       uses: actions/upload-artifact@v4
