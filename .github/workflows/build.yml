@@ -67,6 +67,8 @@ jobs:
         KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       run: |
         cd android
+        echo $GITHUB_WORKSPACE
+        ls $GITHUB_WORKSPACE
         ./gradlew assembleDebug --no-configuration-cache --no-daemon
         -Pandroid.injected.signing.store.file="$GITHUB_WORKSPACE/keystore"
         -Pandroid.injected.signing.store.password="$STORE_PASSWORD"
