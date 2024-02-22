@@ -61,7 +61,7 @@ jobs:
         echo $STORE_FILE | base64 -d > keystore.jks
         pwd && ls -la && ls keystore.jks
         sha1sum keystore.jks
-        ./gradlew assembleDebug --no-configuration-cache --no-daemon
+        ./gradlew assembleDebug --no-configuration-cache --no-daemon \
         -Pandroid.injected.signing.store.file=$(pwd)/keystore.jks \
         -Pandroid.injected.signing.store.password=$STORE_PASSWORD \
         -Pandroid.injected.signing.key.alias=key0 \
