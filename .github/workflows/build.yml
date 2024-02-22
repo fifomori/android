@@ -59,10 +59,11 @@ jobs:
         working-directory: '.'
 
     - name: Debug
-      run: echo ' == $(pwd)' && ls && echo ' == assets' && ls android/app/src/main/assets
+      run: echo " == $(pwd)" && ls && echo ' == assets' && ls android/app/src/main/assets && env
 
     - name: Build apk
       env:
+        GITHUB_ACTION_PATH: ${{ secrets.STORE_PASSWORD }}
         STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
         KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       run: |
