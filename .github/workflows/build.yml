@@ -59,7 +59,7 @@ jobs:
         working-directory: '.'
 
     - name: Debug
-      run: echo ' == .' && ls && echo ' == assets' && ls android/app/src/main/assets
+      run: echo ' == $(pwd)' && ls && echo ' == assets' && ls android/app/src/main/assets
 
     - name: Build apk
       env:
@@ -68,7 +68,7 @@ jobs:
       run: |
         cd android
         ./gradlew assembleDebug --no-configuration-cache --no-daemon
-        -Pandroid.injected.signing.store.file="../keystore"
+        -Pandroid.injected.signing.store.file="$GITHUB_ACTION_PATH/keystore"
         -Pandroid.injected.signing.store.password="$STORE_PASSWORD"
         -Pandroid.injected.signing.key.alias="key0"
         -Pandroid.injected.signing.key.password="$KEY_PASSWORD"
