@@ -31,7 +31,6 @@ jobs:
         base64-encoded-secret: ${{ secrets.KEYSTORE }}
         filename: keystore
         working-directory: '~'
-    - run: ./a/b/c/hello-world.sh
   
     - env:
         STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
