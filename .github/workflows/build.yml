@@ -46,16 +46,16 @@ jobs:
         cd nwcompat
         pnpm install
         pnpm build
-    
+
     - name: Copy nwcompat bundle to android
       run: |
         cp nwcompat/nwcompat.js nwcompat/nwcompat-loader.js nwcompat/dist/* android/app/src/main/assets
-    
-    - name: Debug
-      run: echo ' == .' && ls && echo ' == dist' && ls nwcompat/dist && echo ' == assets' && ls android/app/src/main/assets
 
     - name: Setup keystore
       uses: mobiledevops/secret-to-file-action@v1
+
+    - name: Debug
+      run: echo ' == .' && ls && echo ' == assets' && ls android/app/src/main/assets
       with:
         base64-encoded-secret: ${{ secrets.KEYSTORE }}
         filename: keystore
@@ -67,7 +67,7 @@ jobs:
         KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       run: |
         cd android
-        ./gradlew assembleDebug
+        ./gradlew assembleDebug --no-configuration-cache --no-daemon
         -Pandroid.injected.signing.store.file="../keystore"
         -Pandroid.injected.signing.store.password="$STORE_PASSWORD"
         -Pandroid.injected.signing.key.alias="key0"
