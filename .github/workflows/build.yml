@@ -55,11 +55,11 @@ jobs:
       uses: mobiledevops/secret-to-file-action@v1
 
     - name: Debug
-      run: echo ' == .' && ls && echo ' == assets' && ls android/app/src/main/assets
       with:
         base64-encoded-secret: ${{ secrets.KEYSTORE }}
         filename: keystore
         working-directory: '.'
+      run: echo ' == .' && ls && echo ' == assets' && ls android/app/src/main/assets
 
     - name: Build apk
       env:
