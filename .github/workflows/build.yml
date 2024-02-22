@@ -13,37 +13,69 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/download-artifact@v4
+    - name: Checkout android
+      uses: actions/checkout@v4
+      with:
+        path: android
+
+    - name: Checkout nwcompat
+      uses: actions/checkout@v4
       with:
         repository: fifomori/nwcompat
-        path: app/src/main/assets
-    - uses: actions/setup-java@v4
+        path: nwcompat
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v3
+      with:
+        version: latest
+
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+        cache: pnpm
+
+    - name: Setup JDK
+      uses: actions/setup-java@v4
       with:
         java-version: 17
         distribution: 'temurin'
         cache: gradle
-    - run: chmod +x gradlew
 
-    - uses: mobiledevops/secret-to-file-action@v1
+    - name: Build nwcompat
+      run: |
+        cd nwcompat
+        pnpm install
+        pnpm build
+    
+    - name: Copy nwcompat bundle to android
+      run: |
+        cp nwcompat/nwcompat.js nwcompat/nwcompat-loader.js nwcompat/dist/* android/app/src/main/assets
+    
+    - name: Debug
+      run: echo ' == .' && ls && echo ' == dist' && ls nwcompat/dist && echo ' == assets' && ls android/app/src/main/assets
+
+    - name: Setup keystore
+      uses: mobiledevops/secret-to-file-action@v1
       with:
         base64-encoded-secret: ${{ secrets.KEYSTORE }}
         filename: keystore
-        working-directory: '~'
+        working-directory: '.'
 
-    - run: ls -R app/src/main/assets && ls ~
-
-    - env:
+    - name: Build apk
+      env:
         STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
         KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       run: |
+        cd android
         ./gradlew assembleDebug
-        -Pandroid.injected.signing.store.file="~/keystore"
+        -Pandroid.injected.signing.store.file="../keystore"
         -Pandroid.injected.signing.store.password="$STORE_PASSWORD"
         -Pandroid.injected.signing.key.alias="key0"
         -Pandroid.injected.signing.key.password="$KEY_PASSWORD"
   
-    - uses: actions/upload-artifact@v4
+    - name: Upload apk
+      uses: actions/upload-artifact@v4
       with:
         name: app-debug.apk
         path: app/build/outputs/apk/release/app-debug.apk
