@@ -51,9 +51,6 @@ jobs:
       run: |
         cp nwcompat/nwcompat.js nwcompat/nwcompat-loader.js nwcompat/dist/* android/app/src/main/assets
 
-    - name: Debug
-      run: echo " == $(pwd)" && ls && echo ' == assets' && ls android/app/src/main/assets && env
-
     - name: Build apk
       env:
         STORE_FILE: ${{ secrets.KEYSTORE }}
@@ -62,7 +59,8 @@ jobs:
       run: |
         cd android
         echo $STORE_FILE | base64 -d > keystore.jks
-        ls
+        pwd && ls -la && ls keystore.jks
+        sha1sum keystore.jks
         ./gradlew assembleDebug --no-configuration-cache --no-daemon
         -Pandroid.injected.signing.store.file=$(pwd)/keystore.jks
         -Pandroid.injected.signing.store.password=$STORE_PASSWORD
