@@ -145,11 +145,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Preference directoryPreference = findPreference(PREFERENCE_DIRECTORY);
         Preference oneLoaderPreference = findPreference(PREFERENCE_ONELOADER);
         Preference logsPreference = findPreference(PREFERENCE_LOGS);
-        if (directoryPreference == null || oneLoaderPreference == null || logsPreference == null) return;
+        Preference logsClearPreference = findPreference(PREFERENCE_LOGS_CLEAR);
+        if (directoryPreference == null || oneLoaderPreference == null || logsPreference == null || logsClearPreference == null) return;
 
         directoryPreference.setSummary(String.format("Current: %s", preferences.getString(PREFERENCE_DIRECTORY, "not set")));
         oneLoaderPreference.setEnabled(canPlay(getContext(), mPreferences));
         logsPreference.setEnabled(checkPermissions(getContext()));
+        logsClearPreference.setEnabled(checkPermissions(getContext()));
     }
 
     private void requestPermissions() {
