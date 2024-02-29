@@ -102,6 +102,7 @@ public class WebViewHelper {
 
                 return mPathHandler.handle(path, mOneLoader);
             } catch (Exception e) {
+                Debug.i().log(Log.ERROR, e.toString());
                 e.printStackTrace();
                 return null;
             }

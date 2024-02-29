@@ -116,6 +116,7 @@ public class NwCompat {
             return mEncoder.encodeToString(bytes);
         } catch (IOException e) {
             if (!(e instanceof NoSuchFileException)) {
+                Debug.i().log(Log.ERROR, e.toString());
                 e.printStackTrace();
             }
             return null;
@@ -127,6 +128,7 @@ public class NwCompat {
         try {
             Files.write(Paths.get(path), data);
         } catch (IOException e) {
+            Debug.i().log(Log.ERROR, e.toString());
             e.printStackTrace();
         }
     }
@@ -136,6 +138,7 @@ public class NwCompat {
         try {
             Files.deleteIfExists(Paths.get(path));
         } catch (IOException e) {
+            Debug.i().log(Log.ERROR, e.toString());
             e.printStackTrace();
         }
     }
@@ -145,6 +148,7 @@ public class NwCompat {
         try {
             Files.move(Paths.get(path), Paths.get(newPath));
         } catch (IOException e) {
+            Debug.i().log(Log.ERROR, e.toString());
             e.printStackTrace();
         }
     }

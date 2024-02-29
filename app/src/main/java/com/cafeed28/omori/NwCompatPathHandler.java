@@ -51,6 +51,7 @@ public class NwCompatPathHandler {
             return Files.newInputStream(Paths.get(mDirectory, path));
         } catch (IOException e) {
             if (!(e instanceof NoSuchFileException)) {
+                Debug.i().log(Log.ERROR, e.toString());
                 e.printStackTrace();
             }
         }
@@ -66,6 +67,7 @@ public class NwCompatPathHandler {
                 is = Files.newInputStream(Paths.get(mDirectory, "assets", path));
             } catch (IOException e) {
                 if (!(e instanceof NoSuchFileException)) {
+                    Debug.i().log(Log.ERROR, e.toString());
                     e.printStackTrace();
                 }
             }
@@ -76,6 +78,7 @@ public class NwCompatPathHandler {
                 is = mActivity.getAssets().open(path);
             } catch (IOException e) {
                 if (!(e instanceof FileNotFoundException)) {
+                    Debug.i().log(Log.ERROR, e.toString());
                     e.printStackTrace();
                 }
             }
