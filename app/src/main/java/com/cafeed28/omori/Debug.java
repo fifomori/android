@@ -89,8 +89,12 @@ public class Debug {
 
     public void save(Context context) {
         try {
+            var internalPath = Paths.get(mInternalFileName);
+            var externalPath = Paths.get(mExternalFileName);
             clear(context, false);
-            Files.copy(Paths.get(mInternalFileName), Paths.get(mExternalFileName));
+
+            Files.createDirectories(externalPath.getParent());
+            Files.copy(internalPath, externalPath);
             Toast.makeText(context, String.format("Logs saved in %s", mExternalFileName), Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             Toast.makeText(context, "Failed to save logs, check 'adb logcat' for more info", Toast.LENGTH_LONG).show();

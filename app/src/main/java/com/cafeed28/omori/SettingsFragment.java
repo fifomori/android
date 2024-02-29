@@ -1,6 +1,7 @@
 package com.cafeed28.omori;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -46,6 +47,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private ActivityResultLauncher<String> mRequestPermission;
 
     private Dialog mOneLoaderDialog;
+    private Activity mActivity;
 
     public void setOnPreferencesUpdateListener(OnPreferencesUpdateListener listener) {
         mListener = listener;
@@ -54,6 +56,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        mActivity = getActivity();
+
         PREFERENCE_DIRECTORY = getString(R.string.preference_directory);
         PREFERENCE_KEY = getString(R.string.preference_key);
         PREFERENCE_ONELOADER = getString(R.string.preference_oneloader);
@@ -78,9 +82,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         mRequestPermission = registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
             if (!granted) {
-                Toast.makeText(getContext(), "Storage permission is required", Toast.LENGTH_LONG).show();
+                Toast.makeText(mActivity, "Storage permission is required", Toast.LENGTH_LONG).show();
             }
-            updatePreferences(mPreferences);
+            Toast.makeText(mActivity, "Restart app now", Toast.LENGTH_LONG).show();
+            mActivity.finishAndRemoveTask();
         });
 
         mOneLoaderDialog = new AlertDialog.Builder(context)
@@ -111,20 +116,20 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return;
 
         directoryPreference.setOnPreferenceClickListener(preference -> {
-            if (checkPermissions(getContext())) mOpenDocumentTree.launch(null);
+            if (checkPermissions(mActivity)) mOpenDocumentTree.launch(null);
             else requestPermissions();
             return true;
         });
 
         logsPreference.setOnPreferenceClickListener(preference -> {
-            Debug.i().save(getContext());
+            Debug.i().save(mActivity);
             return true;
         });
 
         logsClearPreference.setOnPreferenceClickListener(preference -> {
-            Debug.i().clear(getContext(), true);
-            Toast.makeText(getContext(), "Restart app now", Toast.LENGTH_SHORT).show();
-            System.exit(0);
+            Debug.i().clear(mActivity, true);
+            Toast.makeText(mActivity, "Restart app now", Toast.LENGTH_LONG).show();
+            mActivity.finishAndRemoveTask();
             return true;
         });
 
@@ -146,17 +151,25 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Preference oneLoaderPreference = findPreference(PREFERENCE_ONELOADER);
         Preference logsPreference = findPreference(PREFERENCE_LOGS);
         Preference logsClearPreference = findPreference(PREFERENCE_LOGS_CLEAR);
-        if (directoryPreference == null || oneLoaderPreference == null || logsPreference == null || logsClearPreference == null) return;
+        if (directoryPreference == null || oneLoaderPreference == null || logsPreference == null || logsClearPreference == null)
+            return;
 
         directoryPreference.setSummary(String.format("Current: %s", preferences.getString(PREFERENCE_DIRECTORY, "not set")));
-        oneLoaderPreference.setEnabled(canPlay(getContext(), mPreferences));
-        logsPreference.setEnabled(checkPermissions(getContext()));
-        logsClearPreference.setEnabled(checkPermissions(getContext()));
+        oneLoaderPreference.setEnabled(canPlay(mActivity, mPreferences));
+
+        boolean filesPermission = checkPermissions(mActivity);
+        if (!logsPreference.isEnabled() && filesPermission) {
+            Toast.makeText(mActivity, "Restart app now", Toast.LENGTH_LONG).show();
+            mActivity.finishAndRemoveTask();
+        }
+
+        logsPreference.setEnabled(filesPermission);
+        logsClearPreference.setEnabled(filesPermission);
     }
 
     private void requestPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            Toast.makeText(getContext(), "Allow all files access", Toast.LENGTH_LONG).show();
+            Toast.makeText(mActivity, "Allow all files access", Toast.LENGTH_LONG).show();
             startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, Uri.parse("package:" + BuildConfig.APPLICATION_ID)));
         } else {
             mRequestPermission.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
