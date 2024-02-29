@@ -55,7 +55,7 @@ public class NwCompat {
     private void jsResolve(int id, boolean success, String result) {
         var formattedResult = result == null ? "null" : String.format("\"%s\"", result);
         var code = String.format("nwcompat.async.callback(%d, %b, %s)", id, success, formattedResult);
-        Log.d("Promise", code);
+        Debug.i().log(Log.DEBUG, code);
         mView.post(() -> mView.evaluateJavascript(code, null));
     }
 

@@ -117,22 +117,22 @@ public class WebViewHelper {
 
         @Override
         public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-            var message = consoleMessage.message();
+            var logLine = String.format("[CONSOLE]: %s", consoleMessage.message());
 
             if (BuildConfig.DEBUG) {
                 switch (consoleMessage.messageLevel()) {
                     case ERROR: // error
-                        Log.e("Console", message + "\n  from " + consoleMessage.sourceId() + ":" + consoleMessage.lineNumber());
+                        Debug.i().log(Log.ERROR, "%s\n  from %s:%s", logLine, consoleMessage.sourceId(), consoleMessage.lineNumber());
                         break;
                     case WARNING: // warn
-                        Log.w("Console", message);
+                        Debug.i().log(Log.WARN, logLine);
                         break;
                     case LOG: // info, log
-                        Log.i("Console", message);
+                        Debug.i().log(Log.INFO, logLine);
                         break;
                     case TIP: // debug
                     case DEBUG: // ?
-                        Log.d("Console", message);
+                        Debug.i().log(Log.DEBUG, logLine);
                         break;
                 }
             }

@@ -1,7 +1,6 @@
 package com.cafeed28.omori;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.webkit.WebView;
@@ -50,7 +49,7 @@ public class WebViewActivity extends Activity {
                     iButton = 3;
                     break;
                 default:
-                    Log.e("Buttons", String.format("Out of range button: %d", button));
+                    Debug.i().log(Log.ERROR, "Out of range button: %d", button);
                     return;
             }
 

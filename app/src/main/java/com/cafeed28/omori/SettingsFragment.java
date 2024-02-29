@@ -38,6 +38,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public static String PREFERENCE_DIRECTORY;
     public static String PREFERENCE_KEY;
     public static String PREFERENCE_ONELOADER;
+    public static String PREFERENCE_LOGS;
+    public static String PREFERENCE_LOGS_CLEAR;
 
     private SharedPreferences mPreferences;
     private ActivityResultLauncher<Uri> mOpenDocumentTree;
@@ -55,6 +57,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         PREFERENCE_DIRECTORY = getString(R.string.preference_directory);
         PREFERENCE_KEY = getString(R.string.preference_key);
         PREFERENCE_ONELOADER = getString(R.string.preference_oneloader);
+        PREFERENCE_LOGS = getString(R.string.preference_logs);
+        PREFERENCE_LOGS_CLEAR = getString(R.string.preference_logs_clear);
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         mPreferences.registerOnSharedPreferenceChangeListener(prefListener);
@@ -76,9 +80,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             if (!granted) {
                 Toast.makeText(getContext(), "Storage permission is required", Toast.LENGTH_LONG).show();
             }
+            updatePreferences(mPreferences);
         });
 
-        mOneLoaderDialog = new AlertDialog.Builder(getContext())
+        mOneLoaderDialog = new AlertDialog.Builder(context)
                 .setTitle("OneLoader is not installed")
                 .setMessage("To use OneLoader, you must install it first")
                 .setPositiveButton("Install", (d, w) -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://mods.one/mod/oneloader"))))
@@ -87,17 +92,39 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        updatePreferences(mPreferences);
+    }
+
+    @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
 
+        // @todo: is there a way to do this better?
         Preference directoryPreference = findPreference(PREFERENCE_DIRECTORY);
         Preference keyPreference = findPreference(PREFERENCE_KEY);
         Preference oneLoaderPreference = findPreference(PREFERENCE_ONELOADER);
-        if (directoryPreference == null || keyPreference == null || oneLoaderPreference == null) return;
+        Preference logsPreference = findPreference(PREFERENCE_LOGS);
+        Preference logsClearPreference = findPreference(PREFERENCE_LOGS_CLEAR);
+        if (directoryPreference == null || keyPreference == null || oneLoaderPreference == null || logsPreference == null || logsClearPreference == null)
+            return;
 
         directoryPreference.setOnPreferenceClickListener(preference -> {
             if (checkPermissions(getContext())) mOpenDocumentTree.launch(null);
             else requestPermissions();
+            return true;
+        });
+
+        logsPreference.setOnPreferenceClickListener(preference -> {
+            Debug.i().save(getContext());
+            return true;
+        });
+
+        logsClearPreference.setOnPreferenceClickListener(preference -> {
+            Debug.i().clear(getContext());
+            Toast.makeText(getContext(), "Restart app now", Toast.LENGTH_SHORT).show();
+            System.exit(0);
             return true;
         });
 
@@ -117,10 +144,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         Preference directoryPreference = findPreference(PREFERENCE_DIRECTORY);
         Preference oneLoaderPreference = findPreference(PREFERENCE_ONELOADER);
-        if (directoryPreference == null || oneLoaderPreference == null) return;
+        Preference logsPreference = findPreference(PREFERENCE_LOGS);
+        if (directoryPreference == null || oneLoaderPreference == null || logsPreference == null) return;
 
         directoryPreference.setSummary(String.format("Current: %s", preferences.getString(PREFERENCE_DIRECTORY, "not set")));
         oneLoaderPreference.setEnabled(canPlay(getContext(), mPreferences));
+        logsPreference.setEnabled(checkPermissions(getContext()));
     }
 
     private void requestPermissions() {

@@ -98,7 +98,7 @@ public class NwCompatPathHandler {
             is = handleAsset(path);
             if (is == null) is = handleGame(path);
             if (is == null) {
-                Log.d(TAG, String.format("file not found: '%s' ('%s')", path, mDirectory));
+                Debug.i().log(Log.INFO, "%s: file not found: '%s' ('%s')", TAG, path, mDirectory);
                 return null;
             }
         }

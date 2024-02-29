@@ -5,4 +5,6 @@
     <string name="preference_key">key</string>
     <string name="preference_directory">directory</string>
     <string name="preference_oneloader">oneloader</string>
+    <string name="preference_logs">logs</string>
+    <string name="preference_logs_clear">logs_clear</string>
 </resources>
