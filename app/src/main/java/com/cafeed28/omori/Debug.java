@@ -77,9 +77,9 @@ public class Debug {
         mPrintWriter.flush();
     }
 
-    public void clear(Context context) {
+    public void clear(Context context, boolean internal) {
         try {
-            Files.deleteIfExists(Paths.get(mInternalFileName));
+            Files.deleteIfExists(Paths.get(internal ? mInternalFileName : mExternalFileName));
         } catch (IOException e) {
             Toast.makeText(context, "Failed to clear logs, check 'adb logcat' for more info", Toast.LENGTH_LONG).show();
             this.log(Log.ERROR, "Failed to clear logs from '%s'", mInternalFileName);
@@ -89,7 +89,7 @@ public class Debug {
 
     public void save(Context context) {
         try {
-            clear(context);
+            clear(context, false);
             Files.copy(Paths.get(mInternalFileName), Paths.get(mExternalFileName));
             Toast.makeText(context, String.format("Logs saved in %s", mExternalFileName), Toast.LENGTH_LONG).show();
         } catch (IOException e) {

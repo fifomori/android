@@ -122,7 +122,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         });
 
         logsClearPreference.setOnPreferenceClickListener(preference -> {
-            Debug.i().clear(getContext());
+            Debug.i().clear(getContext(), true);
             Toast.makeText(getContext(), "Restart app now", Toast.LENGTH_SHORT).show();
             System.exit(0);
             return true;
