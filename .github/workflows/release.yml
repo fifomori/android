@@ -12,7 +12,6 @@ jobs:
     steps:
       - name: Download apk
         uses: suisei-cn/actions-download-file@1.6.0
-        name: Download the file
         with:
           url: https://nightly.link/fifomori/android/workflows/build/main/app-debug.apk.zip
           target: download/
