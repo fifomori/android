@@ -70,11 +70,3 @@ jobs:
         with:
           name: app-debug.apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
-
-      - name: Create release
-        uses: ncipollo/release-action@v1
-        if: startsWith(github.event.ref, 'refs/tags/v')
-        with:
-          artifacts: android/app/build/outputs/apk/debug/app-debug.apk
-          makeLatest: true
-          prerelease: ${{ endsWith(github.event.ref, '-beta') }}
