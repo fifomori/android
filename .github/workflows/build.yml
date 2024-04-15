@@ -3,70 +3,78 @@ name: Build
 on:
   push:
     branches:
-     - main
+      - main
   pull_request:
     branches:
-     - main
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout android
-      uses: actions/checkout@v4
-      with:
-        path: android
+      - name: Checkout android
+        uses: actions/checkout@v4
+        with:
+          path: android
 
-    - name: Checkout nwcompat
-      uses: actions/checkout@v4
-      with:
-        repository: fifomori/nwcompat
-        path: nwcompat
+      - name: Checkout nwcompat
+        uses: actions/checkout@v4
+        with:
+          repository: fifomori/nwcompat
+          path: nwcompat
 
-    - name: Setup pnpm
-      uses: pnpm/action-setup@v3
-      with:
-        version: latest
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: latest
 
-    - name: Setup Node
-      uses: actions/setup-node@v4
-      with:
-        node-version: 18
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
 
-    - name: Setup JDK
-      uses: actions/setup-java@v4
-      with:
-        java-version: 17
-        distribution: 'temurin'
-        cache: gradle
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: "temurin"
+          cache: gradle
 
-    - name: Build nwcompat
-      run: |
-        cd nwcompat
-        pnpm install
-        pnpm build
+      - name: Build nwcompat
+        run: |
+          cd nwcompat
+          pnpm install
+          pnpm build
 
-    - name: Copy nwcompat bundle to android
-      run: |
-        cp nwcompat/nwcompat.js nwcompat/nwcompat-loader.js nwcompat/dist/* android/app/src/main/assets
+      - name: Copy nwcompat bundle to android
+        run: |
+          cp nwcompat/nwcompat.js nwcompat/nwcompat-loader.js nwcompat/dist/* android/app/src/main/assets
 
-    - name: Build apk
-      env:
-        STORE_FILE: ${{ secrets.KEYSTORE }}
-        STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
-        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-      run: |
-        cd android
-        echo $STORE_FILE | base64 -d > keystore.jks
-        ./gradlew assembleDebug --no-configuration-cache --no-daemon \
-        -Pandroid.injected.signing.store.file=$(pwd)/keystore.jks \
-        -Pandroid.injected.signing.store.password="$STORE_PASSWORD" \
-        -Pandroid.injected.signing.key.alias=key0 \
-        -Pandroid.injected.signing.key.password="$KEY_PASSWORD"
+      - name: Build apk
+        env:
+          STORE_FILE: ${{ secrets.KEYSTORE }}
+          STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          cd android
+          echo $STORE_FILE | base64 -d > keystore.jks
+          ./gradlew assembleDebug --no-configuration-cache --no-daemon \
+          -Pandroid.injected.signing.store.file=$(pwd)/keystore.jks \
+          -Pandroid.injected.signing.store.password="$STORE_PASSWORD" \
+          -Pandroid.injected.signing.key.alias=key0 \
+          -Pandroid.injected.signing.key.password="$KEY_PASSWORD"
 
-    - name: Upload apk
-      uses: actions/upload-artifact@v4
-      with:
-        name: app-debug.apk
-        path: android/app/build/outputs/apk/debug/app-debug.apk
+      - name: Upload apk
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug.apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Create release
+        uses: ncipollo/release-action@v1
+        if: startsWith(github.event.ref, 'refs/tags/v')
+        with:
+          artifacts: android/app/build/outputs/apk/debug/app-debug.apk
+          makeLatest: true
+          prerelease: ${{ endsWith(github.event.ref, '-beta') }}
