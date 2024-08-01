@@ -6,11 +6,11 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -33,6 +33,10 @@ public class ButtonView extends View {
     private final Rect mContentRect;
 
     private boolean mPressed;
+    private int mAlphaPressed;
+    private int mAlphaReleased;
+
+    private Paint mPaint = new Paint();
 
     public void setListener(Listener l) {
         mListener = l;
@@ -52,20 +56,35 @@ public class ButtonView extends View {
 
     public ButtonView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.ButtonView, defStyleAttr, defStyleRes);
+        try (TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.ButtonView, defStyleAttr, defStyleRes)) {
+            mDrawablePressed = a.getDrawable(R.styleable.ButtonView_drawablePressed);
+            mDrawableReleased = a.getDrawable(R.styleable.ButtonView_drawableReleased);
+            mDrawableContent = a.getDrawable(R.styleable.ButtonView_drawableContent);
 
-        mDrawablePressed = a.getDrawable(R.styleable.ButtonView_drawablePressed);
-        mDrawableReleased = a.getDrawable(R.styleable.ButtonView_drawableReleased);
-        mDrawableContent = a.getDrawable(R.styleable.ButtonView_drawableContent);
+            mSize = a.getDimensionPixelSize(R.styleable.ButtonView_buttonSize, 48);
+            int inset = mSize / a.getInteger(R.styleable.ButtonView_insetFactor, 3);
 
-        mSize = a.getDimensionPixelSize(R.styleable.ButtonView_buttonSize, 48);
-        int inset = mSize / a.getInteger(R.styleable.ButtonView_insetFactor, 3);
+            mRect = new Rect(0, 0, mSize, mSize);
+            mDrawablePressed.setBounds(mRect);
+            mDrawableReleased.setBounds(mRect);
 
-        mRect = new Rect(0, 0, mSize, mSize);
+            mContentRect = new Rect(inset, inset, mSize - inset, mSize - inset);
+            if (mDrawableContent != null) {
+                mDrawableContent.setBounds(mContentRect);
+            }
+        }
 
-        mContentRect = new Rect(inset, inset, mSize - inset, mSize - inset);
+        setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OUT));
+        mPaint.setAntiAlias(true);
+    }
 
-        a.recycle();
+    public void setParams(int alphaPressed, int alphaReleased) {
+        mAlphaPressed = alphaPressed;
+        mAlphaReleased = alphaReleased;
+
+        mDrawablePressed.setAlpha(mAlphaPressed);
+        mDrawableReleased.setAlpha(mAlphaReleased);
     }
 
     @Override
@@ -75,19 +94,25 @@ public class ButtonView extends View {
 
     @Override
     protected void onDraw(@NonNull Canvas canvas) {
-        Drawable background = mPressed ? mDrawablePressed : mDrawableReleased;
-        int color = mPressed ? Color.BLACK : Color.WHITE;
-        int alpha = mPressed ? 255 : 63;
+        if (mPressed) {
+            // drawing as mask
+            if (mDrawableContent != null) {
+                mDrawableContent.setTint(Color.BLACK);
+                mDrawableContent.setAlpha(255);
+                mDrawableContent.draw(canvas);
+            }
 
-        background.setBounds(mRect);
-        background.setAlpha(alpha);
-        background.draw(canvas);
+            canvas.saveLayer(mContentRect.left, mContentRect.top, mContentRect.right, mContentRect.bottom, mPaint);
+            mDrawablePressed.draw(canvas);
+            canvas.restore();
+        } else {
+            mDrawableReleased.draw(canvas);
 
-        if (mDrawableContent != null) {
-            mDrawableContent.setBounds(mContentRect);
-            mDrawableContent.setAlpha(alpha);
-            mDrawableContent.setTint(color);
-            mDrawableContent.draw(canvas);
+            if (mDrawableContent != null) {
+                mDrawableContent.setTint(Color.WHITE);
+                mDrawableContent.setAlpha(mAlphaReleased);
+                mDrawableContent.draw(canvas);
+            }
         }
     }
 
@@ -103,14 +128,15 @@ public class ButtonView extends View {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // touch events handled in ButtonGroupView
         if (getParent() instanceof ButtonGroupView) return true;
 
         int action = event.getAction();
-        int x = (int)event.getX();
-        int y = (int)event.getY();
+        int x = (int) event.getX();
+        int y = (int) event.getY();
 
         switch (action) {
             case MotionEvent.ACTION_UP:

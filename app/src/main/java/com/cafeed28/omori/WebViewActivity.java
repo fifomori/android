@@ -1,6 +1,7 @@
 package com.cafeed28.omori;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
+import androidx.preference.PreferenceManager;
 
 import java.util.Map;
 
@@ -48,10 +50,16 @@ public class WebViewActivity extends Activity {
         mWebViewHelper = new WebViewHelper(mWebView, this);
         mWebViewHelper.start();
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        float opacityPressed = preferences.getInt(getString(R.string.preference_opacity_pressed), 100) / 100.f;
+        float opacityReleased = preferences.getInt(getString(R.string.preference_opacity_released), 25) / 100.f;
+        int alphaPressed = (int)(255 * opacityPressed);
+        int alphaReleased = (int)(255 * opacityReleased);
+
         for (var entry : mButtonMapper.entrySet()) {
-            ((ButtonView) findViewById(entry.getKey())).setListener(pressed -> {
-                mWebViewHelper.dispatchButton(entry.getValue(), pressed);
-            });
+            ButtonView button = findViewById(entry.getKey());
+            button.setParams(alphaPressed, alphaReleased);
+            button.setListener(pressed -> mWebViewHelper.dispatchButton(entry.getValue(), pressed));
         }
     }
 

@@ -1,19 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="General">
         <Preference
             android:key="@string/preference_directory"
             android:title="Select installation directory" />
         <EditTextPreference
             android:key="@string/preference_key"
+            android:title="Enter decryption key"
             android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:title="Enter decryption key" />
+            android:singleLine="true" />
         <SwitchPreference
-            android:defaultValue="false"
-            android:dependency="@string/preference_directory"
             android:key="@string/preference_oneloader"
-            android:title="Enable OneLoader" />
+            android:dependency="@string/preference_directory"
+            android:title="Enable OneLoader"
+            android:defaultValue="false" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Controls">
+        <SeekBarPreference
+            android:key="@string/preference_opacity_pressed"
+            android:title="Pressed button opacity"
+            android:max="100"
+            android:defaultValue="100"
+            app:showSeekBarValue="true" />
+        <SeekBarPreference
+            android:key="@string/preference_opacity_released"
+            android:title="Released button opacity"
+            android:max="100"
+            android:defaultValue="25"
+            app:showSeekBarValue="true" />
     </PreferenceCategory>
     <PreferenceCategory android:title="Debug">
         <Preference

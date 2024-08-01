@@ -39,6 +39,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public static String PREFERENCE_DIRECTORY;
     public static String PREFERENCE_KEY;
     public static String PREFERENCE_ONELOADER;
+    public static String PREFERENCE_OPACITY_PRESSED;
+    public static String PREFERENCE_OPACITY_RELEASED;
     public static String PREFERENCE_LOGS;
     public static String PREFERENCE_LOGS_CLEAR;
 
@@ -61,6 +63,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         PREFERENCE_DIRECTORY = getString(R.string.preference_directory);
         PREFERENCE_KEY = getString(R.string.preference_key);
         PREFERENCE_ONELOADER = getString(R.string.preference_oneloader);
+        PREFERENCE_OPACITY_PRESSED = getString(R.string.preference_opacity_pressed);
+        PREFERENCE_OPACITY_RELEASED = getString(R.string.preference_opacity_released);
         PREFERENCE_LOGS = getString(R.string.preference_logs);
         PREFERENCE_LOGS_CLEAR = getString(R.string.preference_logs_clear);
 
@@ -110,9 +114,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Preference directoryPreference = findPreference(PREFERENCE_DIRECTORY);
         Preference keyPreference = findPreference(PREFERENCE_KEY);
         Preference oneLoaderPreference = findPreference(PREFERENCE_ONELOADER);
+        Preference opacityPressedPreference = findPreference(PREFERENCE_OPACITY_PRESSED);
+        Preference opacityReleasedPreference = findPreference(PREFERENCE_OPACITY_RELEASED);
         Preference logsPreference = findPreference(PREFERENCE_LOGS);
         Preference logsClearPreference = findPreference(PREFERENCE_LOGS_CLEAR);
-        if (directoryPreference == null || keyPreference == null || oneLoaderPreference == null || logsPreference == null || logsClearPreference == null)
+        if (directoryPreference == null || keyPreference == null || oneLoaderPreference == null || opacityPressedPreference == null || opacityReleasedPreference == null || logsPreference == null || logsClearPreference == null)
             return;
 
         directoryPreference.setOnPreferenceClickListener(preference -> {
@@ -149,9 +155,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         Preference directoryPreference = findPreference(PREFERENCE_DIRECTORY);
         Preference oneLoaderPreference = findPreference(PREFERENCE_ONELOADER);
+        Preference opacityPressedPreference = findPreference(PREFERENCE_OPACITY_PRESSED);
+        Preference opacityReleasedPreference = findPreference(PREFERENCE_OPACITY_RELEASED);
         Preference logsPreference = findPreference(PREFERENCE_LOGS);
         Preference logsClearPreference = findPreference(PREFERENCE_LOGS_CLEAR);
-        if (directoryPreference == null || oneLoaderPreference == null || logsPreference == null || logsClearPreference == null)
+        if (directoryPreference == null || oneLoaderPreference == null || opacityPressedPreference == null || opacityReleasedPreference == null || logsPreference == null || logsClearPreference == null)
             return;
 
         directoryPreference.setSummary(String.format("Current: %s", preferences.getString(PREFERENCE_DIRECTORY, "not set")));
