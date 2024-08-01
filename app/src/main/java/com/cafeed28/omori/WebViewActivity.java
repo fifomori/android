@@ -2,8 +2,11 @@ package com.cafeed28.omori;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -14,6 +17,7 @@ import java.util.Map;
 public class WebViewActivity extends Activity {
     private WebView mWebView;
     private WebViewHelper mWebViewHelper;
+    private boolean mBackClickedOnce;
 
     // see nwcompat.gamepad
     private final Map<Integer, Integer> mButtonMapper = Map.of(
@@ -74,6 +78,16 @@ public class WebViewActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        // super.onBackPressed();
+        if (mBackClickedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        mBackClickedOnce = true;
+        Toast.makeText(this, "Click back twice to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            mBackClickedOnce = false;
+        }, 2000);
     }
 }
