@@ -38,4 +38,8 @@ wmic process where caption='OMORI.exe' get commandline | findstr .*--6
 1. Соберите [nwcompat](https://github.com/fifomori/nwcompat)
 2. Соберите проект в Android Studio
 
-# [Благодарности](https://github.com/fifomori/nwcompat#credits)
+# Благодарности
+
+- Наэкранные кнопки геймпада сделаны с помощью [Xelu's FREE Controller Prompts](https://thoseawesomeguys.com/prompts/) и оптимизированы инструментов из [этого ответа на stackoverflow](https://stackoverflow.com/a/74330757/22076815)
+
+- Дополнительно в [nwcompat](https://github.com/fifomori/nwcompat#credits)

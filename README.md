@@ -40,4 +40,8 @@ To use OneLoader, [install](https://mods.one/mod/oneloader) it to your OMORI dir
 1. Build [nwcompat](https://github.com/fifomori/nwcompat)
 2. Build in Android Studio
 
-# [Credits](https://github.com/fifomori/nwcompat#credits)
+# Credits
+
+- Onscreen gamepad buttons are made using [Xelu's FREE Controller Prompts](https://thoseawesomeguys.com/prompts/) and optimized using a tool from [this stackoverflow answer](https://stackoverflow.com/a/74330757/22076815)
+
+- For more credits see [nwcompat](https://github.com/fifomori/nwcompat#credits)
