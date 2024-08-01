@@ -11,6 +11,34 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <com.cafeed28.omori.ButtonView
+        android:id="@+id/button_trigger_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:buttonSize="56dp"
+        app:insetFactor="4"
+        app:drawableContent="@drawable/button_trigger_left"
+        app:drawablePressed="@drawable/button_trigger_pressed"
+        app:drawableReleased="@drawable/button_trigger_released" />
+
+    <com.cafeed28.omori.ButtonView
+        android:id="@+id/button_trigger_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:buttonSize="56dp"
+        app:insetFactor="4"
+        app:drawableContent="@drawable/button_trigger_right"
+        app:drawablePressed="@drawable/button_trigger_pressed"
+        app:drawableReleased="@drawable/button_trigger_released" />
+
     <!-- dpad -->
     <com.cafeed28.omori.ButtonGroupView
         android:id="@+id/grid_dpad"

@@ -21,6 +21,8 @@ public class WebViewActivity extends Activity {
             R.id.button_b, 1,
             R.id.button_x, 2,
             R.id.button_y, 3,
+            R.id.button_trigger_left, 4,
+            R.id.button_trigger_right, 5,
             R.id.button_dpad_up, 12,
             R.id.button_dpad_down, 13,
             R.id.button_dpad_left, 14,
