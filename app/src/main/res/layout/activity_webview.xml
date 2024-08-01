@@ -11,32 +11,126 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.cafeed28.omori.ButtonsView
-        android:id="@+id/dpad"
+    <!-- dpad -->
+    <com.cafeed28.omori.ButtonGroupView
+        android:id="@+id/grid_dpad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="64dp"
-        app:buttonPressedBackground="@drawable/button_pressed"
-        app:buttonReleasedBackground="@drawable/button_released"
-        app:buttonSize="56dp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:orientation="horizontal"
+        android:columnCount="3"
+        android:rowCount="3" >
 
-    <com.cafeed28.omori.ButtonsView
-        android:id="@+id/buttons"
+        <!-- top row -->
+        <Space android:layout_height="0dp" android:layout_width="0dp" />
+
+        <com.cafeed28.omori.ButtonView
+            android:id="@+id/button_dpad_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:buttonSize="56dp"
+            app:drawablePressed="@drawable/button_pressed"
+            app:drawableReleased="@drawable/button_released" />
+
+        <Space android:layout_height="0dp" android:layout_width="0dp" />
+
+        <!-- mid row -->
+        <com.cafeed28.omori.ButtonView
+            android:id="@+id/button_dpad_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:buttonSize="56dp"
+            app:drawablePressed="@drawable/button_pressed"
+            app:drawableReleased="@drawable/button_released" />
+
+        <Space android:layout_height="0dp" android:layout_width="0dp" />
+
+        <com.cafeed28.omori.ButtonView
+            android:id="@+id/button_dpad_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:buttonSize="56dp"
+            app:drawablePressed="@drawable/button_pressed"
+            app:drawableReleased="@drawable/button_released" />
+
+        <!-- bottom row -->
+        <Space android:layout_height="0dp" android:layout_width="0dp" />
+
+        <com.cafeed28.omori.ButtonView
+            android:id="@+id/button_dpad_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:buttonSize="56dp"
+            app:drawablePressed="@drawable/button_pressed"
+            app:drawableReleased="@drawable/button_released" />
+
+        <Space android:layout_height="0dp" android:layout_width="0dp" />
+    </com.cafeed28.omori.ButtonGroupView>
+
+    <!-- buttons -->
+    <com.cafeed28.omori.ButtonGroupView
+        android:id="@+id/grid_buttons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="64dp"
-        app:buttonBottomForeground="@drawable/button_b"
-        app:buttonLeftForeground="@drawable/button_y"
-        app:buttonPressedBackground="@drawable/button_pressed"
-        app:buttonReleasedBackground="@drawable/button_released"
-        app:buttonRightForeground="@drawable/button_a"
-        app:buttonSize="56dp"
-        app:buttonTopForeground="@drawable/button_x"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:orientation="horizontal"
+        android:columnCount="3"
+        android:rowCount="3" >
+
+        <!-- top row -->
+        <Space android:layout_height="0dp" android:layout_width="0dp" />
+
+        <com.cafeed28.omori.ButtonView
+            android:id="@+id/button_x"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:buttonSize="56dp"
+            app:drawableContent="@drawable/button_x"
+            app:drawablePressed="@drawable/button_pressed"
+            app:drawableReleased="@drawable/button_released" />
+
+        <Space android:layout_height="0dp" android:layout_width="0dp" />
+
+        <!-- mid row -->
+        <com.cafeed28.omori.ButtonView
+            android:id="@+id/button_y"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:buttonSize="56dp"
+            app:drawableContent="@drawable/button_y"
+            app:drawablePressed="@drawable/button_pressed"
+            app:drawableReleased="@drawable/button_released" />
+
+        <Space android:layout_height="0dp" android:layout_width="0dp" />
+
+        <com.cafeed28.omori.ButtonView
+            android:id="@+id/button_a"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:buttonSize="56dp"
+            app:drawableContent="@drawable/button_a"
+            app:drawablePressed="@drawable/button_pressed"
+            app:drawableReleased="@drawable/button_released" />
+
+        <!-- bottom row -->
+        <Space android:layout_height="0dp" android:layout_width="0dp" />
+
+        <com.cafeed28.omori.ButtonView
+            android:id="@+id/button_b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:buttonSize="56dp"
+            app:drawableContent="@drawable/button_b"
+            app:drawablePressed="@drawable/button_pressed"
+            app:drawableReleased="@drawable/button_released" />
+
+        <Space android:layout_height="0dp" android:layout_width="0dp" />
+    </com.cafeed28.omori.ButtonGroupView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

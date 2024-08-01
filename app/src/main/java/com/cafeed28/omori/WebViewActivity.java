@@ -9,9 +9,23 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
+import java.util.Map;
+
 public class WebViewActivity extends Activity {
     private WebView mWebView;
     private WebViewHelper mWebViewHelper;
+
+    // see nwcompat.gamepad
+    private final Map<Integer, Integer> mButtonMapper = Map.of(
+            R.id.button_a, 0,
+            R.id.button_b, 1,
+            R.id.button_x, 2,
+            R.id.button_y, 3,
+            R.id.button_dpad_up, 12,
+            R.id.button_dpad_down, 13,
+            R.id.button_dpad_left, 14,
+            R.id.button_dpad_right, 15
+    );
 
     private void hideSystemUI() {
         WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
@@ -28,33 +42,11 @@ public class WebViewActivity extends Activity {
         mWebViewHelper = new WebViewHelper(mWebView, this);
         mWebViewHelper.start();
 
-        ((ButtonsView) findViewById(R.id.dpad)).setButtonsListener((button, pressed) -> {
-            mWebViewHelper.dispatchButton(button + 12, pressed);
-        });
-
-        ((ButtonsView) findViewById(R.id.buttons)).setButtonsListener((button, pressed) -> {
-            // see nwcompat.gamepad
-            int iButton;
-            switch (button) {
-                case ButtonsView.RIGHT:
-                    iButton = 0;
-                    break;
-                case ButtonsView.BOTTOM:
-                    iButton = 1;
-                    break;
-                case ButtonsView.TOP:
-                    iButton = 2;
-                    break;
-                case ButtonsView.LEFT:
-                    iButton = 3;
-                    break;
-                default:
-                    Debug.i().log(Log.ERROR, "Out of range button: %d", button);
-                    return;
-            }
-
-            mWebViewHelper.dispatchButton(iButton, pressed);
-        });
+        for (var entry : mButtonMapper.entrySet()) {
+            ((ButtonView) findViewById(entry.getKey())).setListener(pressed -> {
+                mWebViewHelper.dispatchButton(entry.getValue(), pressed);
+            });
+        }
     }
 
     @Override
