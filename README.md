@@ -33,7 +33,7 @@ wmic process where caption='OMORI.exe' get commandline | findstr .*--6
 
 To use OneLoader, [install](https://mods.one/mod/oneloader) it to your OMORI directory and enable it in settings
 
-**IMPORTANT**: see [chromori](https://github.com/fifomori/chromori#oneloader-)
+![warning](.github/assets/warning.gif) **IMPORTANT**: see [chromori](https://github.com/fifomori/chromori#oneloader-)
 
 # Building
 
