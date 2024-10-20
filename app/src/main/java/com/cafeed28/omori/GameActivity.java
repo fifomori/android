@@ -1,39 +1,24 @@
 package com.cafeed28.omori;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
-import android.webkit.WebView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
-import androidx.preference.PreferenceManager;
 
-import java.util.Map;
-
-public class WebViewActivity extends Activity {
-    private WebView mWebView;
-    private WebViewHelper mWebViewHelper;
-    private boolean mBackClickedOnce;
-
-    // see nwcompat.gamepad
-    private final Map<Integer, Integer> mButtonMapper = Map.of(
-            R.id.button_a, 0,
-            R.id.button_b, 1,
-            R.id.button_x, 2,
-            R.id.button_y, 3,
-            R.id.button_trigger_left, 4,
-            R.id.button_trigger_right, 5,
-            R.id.button_dpad_up, 12,
-            R.id.button_dpad_down, 13,
-            R.id.button_dpad_left, 14,
-            R.id.button_dpad_right, 15
-    );
+public class GameActivity extends Activity {
+    private OmoWebView mWebView;
+    private Dialog mMenuDialog;
+    private Dialog mQuitDialog;
 
     private void hideSystemUI() {
         WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
@@ -44,23 +29,48 @@ public class WebViewActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_webview);
+        setContentView(R.layout.activity_game);
 
         mWebView = findViewById(R.id.webView);
-        mWebViewHelper = new WebViewHelper(mWebView, this);
-        mWebViewHelper.start();
+        mWebView.setOnCloseWindowListener(this::finishAndRemoveTask);
+        mWebView.start();
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        OmoApplication application = (OmoApplication) getApplicationContext();
+        SharedPreferences preferences = application.getPreferences();
         float opacityPressed = preferences.getInt(getString(R.string.preference_opacity_pressed), 100) / 100.f;
         float opacityReleased = preferences.getInt(getString(R.string.preference_opacity_released), 25) / 100.f;
         int alphaPressed = (int)(255 * opacityPressed);
         int alphaReleased = (int)(255 * opacityReleased);
 
-        for (var entry : mButtonMapper.entrySet()) {
+        for (var entry : NwCompat.ID_BUTTON_MAPPER.entrySet()) {
             ButtonView button = findViewById(entry.getKey());
             button.setParams(alphaPressed, alphaReleased);
-            button.setListener(pressed -> mWebViewHelper.dispatchButton(entry.getValue(), pressed));
+            button.setListener(pressed -> mWebView.dispatchButton(entry.getValue(), pressed));
         }
+
+        final CharSequence[] menuItems = new CharSequence[] {"Toggle FPS counter", "Quit game"};
+
+        mMenuDialog = new AlertDialog.Builder(this)
+                .setTitle("Menu")
+                .setItems(menuItems, (d, w) -> {
+                    switch (w) {
+                        case 0: // Toggle FPS counter
+                            mWebView.eval("Graphics._toggleFPSCounter();");
+                            break;
+                        case 1: // Quit game
+                            mQuitDialog.show();
+                            break;
+                    }
+                    d.dismiss();
+                })
+                .create();
+
+        mQuitDialog = new AlertDialog.Builder(this)
+                .setTitle("Quit game")
+                .setMessage("Are you sure you want to quit?")
+                .setPositiveButton("Yes", (d, w) -> finishAndRemoveTask())
+                .setNegativeButton("No", (d, w) -> d.cancel())
+                .create();
     }
 
     @Override
@@ -86,16 +96,6 @@ public class WebViewActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (mBackClickedOnce) {
-            super.onBackPressed();
-            return;
-        }
-
-        mBackClickedOnce = true;
-        Toast.makeText(this, "Click back twice to exit", Toast.LENGTH_SHORT).show();
-
-        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            mBackClickedOnce = false;
-        }, 2000);
+        mMenuDialog.show();
     }
 }

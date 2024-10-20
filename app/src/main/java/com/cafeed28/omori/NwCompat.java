@@ -1,6 +1,7 @@
 package com.cafeed28.omori;
 
 import android.util.Log;
+import android.view.KeyEvent;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
@@ -16,9 +17,37 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 
 public class NwCompat {
     public static final String INTERFACE = "nwcompat";
+
+    // see nwcompat.gamepad
+    public static final Map<Integer, Integer> ID_BUTTON_MAPPER = Map.of(
+            R.id.button_a, 0,
+            R.id.button_b, 1,
+            R.id.button_x, 2,
+            R.id.button_y, 3,
+            R.id.button_trigger_left, 4,
+            R.id.button_trigger_right, 5,
+            R.id.button_dpad_up, 12,
+            R.id.button_dpad_down, 13,
+            R.id.button_dpad_left, 14,
+            R.id.button_dpad_right, 15
+    );
+
+    public static final Map<Integer, Integer> KEY_BUTTON_MAPPER = Map.of(
+            KeyEvent.KEYCODE_BUTTON_A, 0,
+            KeyEvent.KEYCODE_BUTTON_B, 1,
+            KeyEvent.KEYCODE_BUTTON_X, 2,
+            KeyEvent.KEYCODE_BUTTON_Y, 3,
+            KeyEvent.KEYCODE_BUTTON_L1, 4,
+            KeyEvent.KEYCODE_BUTTON_R1, 5,
+            KeyEvent.KEYCODE_DPAD_UP, 12,
+            KeyEvent.KEYCODE_DPAD_DOWN, 13,
+            KeyEvent.KEYCODE_DPAD_LEFT, 14,
+            KeyEvent.KEYCODE_DPAD_RIGHT, 15
+    );
 
     private final WebView mView;
     private final String mDataDirectory;

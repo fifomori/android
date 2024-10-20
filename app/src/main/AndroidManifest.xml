@@ -9,9 +9,10 @@
         tools:ignore="ScopedStorage" />
 
     <application
-        android:hardwareAccelerated="true"
+        android:name=".OmoApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:hardwareAccelerated="true"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:usesCleartextTraffic="true">
@@ -26,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".WebViewActivity"
+            android:name=".GameActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="true"
             android:launchMode="singleTask"

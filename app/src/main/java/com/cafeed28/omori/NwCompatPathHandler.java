@@ -1,6 +1,7 @@
 package com.cafeed28.omori;
 
 import android.app.Activity;
+import android.content.res.AssetManager;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.webkit.WebResourceResponse;
@@ -21,7 +22,8 @@ import java.util.List;
 
 public class NwCompatPathHandler {
     private final String TAG = this.getClass().getSimpleName();
-    private final Activity mActivity;
+
+    private final AssetManager mAssets;
     private final String mDirectory;
 
     private static final List<String> mOneLoaderBlockList = Arrays.asList(
@@ -30,8 +32,8 @@ public class NwCompatPathHandler {
             "js/libs/pixi-picture.js"
     );
 
-    public NwCompatPathHandler(Activity activity, String directory) {
-        mActivity = activity;
+    public NwCompatPathHandler(AssetManager assets, String directory) {
+        mAssets = assets;
         mDirectory = directory;
     }
 
@@ -75,7 +77,7 @@ public class NwCompatPathHandler {
 
         if (is == null) {
             try {
-                is = mActivity.getAssets().open(path);
+                is = mAssets.open(path);
             } catch (IOException e) {
                 if (!(e instanceof FileNotFoundException)) {
                     Debug.i().log(Log.ERROR, e.toString());

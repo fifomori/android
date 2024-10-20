@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
         playButton.setEnabled(fragment.canPlay(this, PreferenceManager.getDefaultSharedPreferences(this)));
         playButton.setOnClickListener(v -> {
-            startActivity(new Intent(this, WebViewActivity.class));
+            startActivity(new Intent(this, GameActivity.class));
             finish();
         });
     }
