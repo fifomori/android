@@ -102,7 +102,7 @@ public class ButtonView extends View {
                 mDrawableContent.draw(canvas);
             }
 
-            canvas.saveLayer(mContentRect.left, mContentRect.top, mContentRect.right, mContentRect.bottom, mPaint);
+            canvas.saveLayer(mRect.left, mRect.top, mRect.right, mRect.bottom, mPaint);
             mDrawablePressed.draw(canvas);
             canvas.restore();
         } else {
