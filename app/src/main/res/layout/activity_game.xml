@@ -17,27 +17,27 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:buttonSize="56dp"
-        app:insetFactor="4"
         app:drawableContent="@drawable/button_trigger_left"
         app:drawablePressed="@drawable/button_trigger_pressed"
-        app:drawableReleased="@drawable/button_trigger_released" />
+        app:drawableReleased="@drawable/button_trigger_released"
+        app:insetFactor="4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.cafeed28.omori.ButtonView
         android:id="@+id/button_trigger_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginEnd="24dp"
         app:buttonSize="56dp"
-        app:insetFactor="4"
         app:drawableContent="@drawable/button_trigger_right"
         app:drawablePressed="@drawable/button_trigger_pressed"
-        app:drawableReleased="@drawable/button_trigger_released" />
+        app:drawableReleased="@drawable/button_trigger_released"
+        app:insetFactor="4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- dpad -->
     <com.cafeed28.omori.ButtonGroupView
@@ -46,14 +46,16 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="64dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:orientation="horizontal"
         android:columnCount="3"
-        android:rowCount="3" >
+        android:orientation="horizontal"
+        android:rowCount="3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <!-- top row -->
-        <Space android:layout_height="0dp" android:layout_width="0dp" />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
 
         <com.cafeed28.omori.ButtonView
             android:id="@+id/button_dpad_up"
@@ -63,7 +65,9 @@
             app:drawablePressed="@drawable/button_pressed"
             app:drawableReleased="@drawable/button_released" />
 
-        <Space android:layout_height="0dp" android:layout_width="0dp" />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
 
         <!-- mid row -->
         <com.cafeed28.omori.ButtonView
@@ -74,7 +78,9 @@
             app:drawablePressed="@drawable/button_pressed"
             app:drawableReleased="@drawable/button_released" />
 
-        <Space android:layout_height="0dp" android:layout_width="0dp" />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
 
         <com.cafeed28.omori.ButtonView
             android:id="@+id/button_dpad_right"
@@ -85,7 +91,9 @@
             app:drawableReleased="@drawable/button_released" />
 
         <!-- bottom row -->
-        <Space android:layout_height="0dp" android:layout_width="0dp" />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
 
         <com.cafeed28.omori.ButtonView
             android:id="@+id/button_dpad_down"
@@ -95,7 +103,9 @@
             app:drawablePressed="@drawable/button_pressed"
             app:drawableReleased="@drawable/button_released" />
 
-        <Space android:layout_height="0dp" android:layout_width="0dp" />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
     </com.cafeed28.omori.ButtonGroupView>
 
     <!-- buttons -->
@@ -105,14 +115,16 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="64dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:orientation="horizontal"
         android:columnCount="3"
-        android:rowCount="3" >
+        android:orientation="horizontal"
+        android:rowCount="3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <!-- top row -->
-        <Space android:layout_height="0dp" android:layout_width="0dp" />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
 
         <com.cafeed28.omori.ButtonView
             android:id="@+id/button_x"
@@ -123,7 +135,9 @@
             app:drawablePressed="@drawable/button_pressed"
             app:drawableReleased="@drawable/button_released" />
 
-        <Space android:layout_height="0dp" android:layout_width="0dp" />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
 
         <!-- mid row -->
         <com.cafeed28.omori.ButtonView
@@ -135,7 +149,9 @@
             app:drawablePressed="@drawable/button_pressed"
             app:drawableReleased="@drawable/button_released" />
 
-        <Space android:layout_height="0dp" android:layout_width="0dp" />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
 
         <com.cafeed28.omori.ButtonView
             android:id="@+id/button_a"
@@ -147,7 +163,9 @@
             app:drawableReleased="@drawable/button_released" />
 
         <!-- bottom row -->
-        <Space android:layout_height="0dp" android:layout_width="0dp" />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
 
         <com.cafeed28.omori.ButtonView
             android:id="@+id/button_b"
@@ -158,7 +176,9 @@
             app:drawablePressed="@drawable/button_pressed"
             app:drawableReleased="@drawable/button_released" />
 
-        <Space android:layout_height="0dp" android:layout_width="0dp" />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
     </com.cafeed28.omori.ButtonGroupView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
