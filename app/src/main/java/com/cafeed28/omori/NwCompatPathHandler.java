@@ -1,6 +1,5 @@
 package com.cafeed28.omori;
 
-import android.app.Activity;
 import android.content.res.AssetManager;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
@@ -18,7 +17,9 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NwCompatPathHandler {
     private final String TAG = this.getClass().getSimpleName();
@@ -108,6 +109,12 @@ public class NwCompatPathHandler {
             }
         }
 
-        return new WebResourceResponse(getMimeType(path), null, is);
+        Map<String, String> headers = new HashMap<>(2);
+        headers.put("Pragma", "no-cache");
+        headers.put("Cache-Control", "no-cache");
+
+        WebResourceResponse response = new WebResourceResponse(getMimeType(path), null, is);
+        response.setResponseHeaders(headers);
+        return response;
     }
 }

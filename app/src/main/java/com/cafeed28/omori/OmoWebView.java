@@ -1,18 +1,12 @@
 package com.cafeed28.omori;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.net.Uri;
-import android.os.UserManager;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.ConsoleMessage;
 import android.webkit.WebChromeClient;
@@ -25,9 +19,7 @@ import android.webkit.WebViewClient;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 public class OmoWebView extends WebView {
     public interface OnCloseWindowListener {
@@ -96,11 +88,7 @@ public class OmoWebView extends WebView {
                 .build()
                 .toString();
 
-        Map<String, String> noCacheHeaders = new HashMap<>(2);
-        noCacheHeaders.put("Pragma", "no-cache");
-        noCacheHeaders.put("Cache-Control", "no-cache");
-
-        loadUrl(url, noCacheHeaders);
+        loadUrl(url);
     }
 
     public void dispatchButton(int button, boolean pressed) {
