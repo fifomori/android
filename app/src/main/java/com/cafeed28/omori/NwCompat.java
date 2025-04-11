@@ -141,7 +141,12 @@ public class NwCompat {
     @JavascriptInterface
     public String fsReadFile(String path) {
         try {
-            var bytes = Files.readAllBytes(Paths.get(path));
+            var filePath = Paths.get(path);
+            if (!filePath.isAbsolute()) {
+                filePath = Paths.get(mGameDirectory, path);
+            }
+
+            var bytes = Files.readAllBytes(filePath);
             return mEncoder.encodeToString(bytes);
         } catch (IOException e) {
             if (!(e instanceof NoSuchFileException)) {
@@ -155,7 +160,12 @@ public class NwCompat {
     @JavascriptInterface
     public void fsWriteFile(String path, byte[] data) {
         try {
-            Files.write(Paths.get(path), data);
+            var filePath = Paths.get(path);
+            if (!filePath.isAbsolute()) {
+                filePath = Paths.get(mGameDirectory, path);
+            }
+
+            Files.write(filePath, data);
         } catch (IOException e) {
             Debug.i().log(Log.ERROR, e.toString());
             e.printStackTrace();
