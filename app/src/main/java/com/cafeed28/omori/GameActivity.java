@@ -2,13 +2,9 @@ package com.cafeed28.omori;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.widget.Toast;
+import android.view.ViewGroup;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.WindowCompat;
@@ -71,6 +67,26 @@ public class GameActivity extends Activity {
                 .setPositiveButton("Yes", (d, w) -> finishAndRemoveTask())
                 .setNegativeButton("No", (d, w) -> d.cancel())
                 .create();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mWebView != null) {
+            try {
+                ViewGroup contentView = (ViewGroup) mWebView.getParent();
+                contentView.removeView(mWebView);
+
+                // causes "Renderer process crash detected (code -1)"
+                // chatgpt says it is normal when we're calling destroy
+                // i didn't found any proof of it in documentation or elsewhere
+                mWebView.destroy();
+                mWebView = null;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        super.onDestroy();
     }
 
     @Override
