@@ -140,10 +140,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         });
 
         oneLoaderPreference.setOnPreferenceChangeListener((preference, newValue) -> {
-            if (!isOneLoaderInstalled()) {
-                mOneLoaderDialog.show();
-                return false;
+            if ((boolean) newValue) { // allow user to turn off even if oneloader isn't installed
+                if (!isOneLoaderInstalled()) {
+                    mOneLoaderDialog.show();
+                    return false;
+                }
             }
+
             return true;
         });
 
