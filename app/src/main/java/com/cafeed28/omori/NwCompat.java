@@ -93,18 +93,29 @@ public class NwCompat {
     }
 
     @JavascriptInterface
-    public String getDataDirectory() {
-        return mDataDirectory;
-    }
+    public String getNativeInfo() {
+        var webViewPackage = WebView.getCurrentWebViewPackage();
 
-    @JavascriptInterface
-    public String getGameDirectory() {
-        return mGameDirectory;
-    }
+        try {
+            JSONObject result = new JSONObject();
+            result.put("dataDirectory", mDataDirectory);
+            result.put("gameDirectory", mGameDirectory);
+            result.put("key", mKey);
 
-    @JavascriptInterface
-    public String getKey() {
-        return mKey;
+            if (webViewPackage != null) {
+                result.put("webViewPackage", webViewPackage.packageName);
+                result.put("webViewVersion", webViewPackage.versionName);
+            } else {
+                result.put("webViewPackage", "unknown");
+                result.put("webViewVersion", "unknown");
+            }
+
+            result.put("hostVersion", BuildConfig.VERSION_NAME);
+            return result.toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "{}";
+        }
     }
 
     /**
