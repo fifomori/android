@@ -83,7 +83,9 @@ public class OmoWebView extends WebView {
 
         if (targetMode != null) {
             Debug.i().log(Log.INFO, "targetMode(%d): %s", targetMode.getModeId(), targetMode);
-            window.getAttributes().preferredRefreshRate = targetMode.getRefreshRate();
+            var attributes = window.getAttributes();
+            attributes.preferredRefreshRate = targetMode.getRefreshRate();
+            window.setAttributes(attributes);
         }
     }
 
