@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
-import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -56,9 +55,9 @@ public class OmoWebView extends WebView {
         this(context, attrs, defStyleAttr, 0);
     }
 
-    private void setFrameRate(Window window, Display display, int frameRate) {
+    private void setFrameRate(Window window, int frameRate) {
+        Display display = window.getWindowManager().getDefaultDisplay();
         if (Math.floor(display.getRefreshRate()) == frameRate) {
-            Debug.i().log(Log.INFO, "setFrameRate: already set");
             return;
         }
 
@@ -87,35 +86,12 @@ public class OmoWebView extends WebView {
             var attributes = window.getAttributes();
             attributes.preferredRefreshRate = targetMode.getRefreshRate();
             window.setAttributes(attributes);
-        } else {
-            Debug.i().log(Log.WARN, "targetMode == null");
-            Toast.makeText(getContext(), "Suitable display mode not found, view logs for details", Toast.LENGTH_LONG).show();
         }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     public OmoWebView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-
-        DisplayManager displayManager = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
-        displayManager.registerDisplayListener(new DisplayManager.DisplayListener() {
-            @Override
-            public void onDisplayAdded(int displayId) {}
-
-            @Override
-            public void onDisplayRemoved(int displayId) {}
-
-            @Override
-            public void onDisplayChanged(int displayId) {
-                Debug.i().log(Log.INFO, "onDisplayChanged");
-                Display display = displayManager.getDisplay(displayId);
-
-                Activity activity = (Activity) getContext();
-                Window window = activity.getWindow();
-
-                setFrameRate(window, display, 60);
-            }
-        }, null);
 
         OmoApplication application = (OmoApplication) context.getApplicationContext();
         SharedPreferences preferences = application.getPreferences();
@@ -140,16 +116,15 @@ public class OmoWebView extends WebView {
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         settings.setLoadsImagesAutomatically(true);
         settings.setMediaPlaybackRequiresUserGesture(false);
-    }
 
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-
-        Activity activity = (Activity) getContext();
-        Window window = activity.getWindow();
-
-        setFrameRate(window, getDisplay(), 60);
+        if (context instanceof Activity) {
+            Activity activity = (Activity) context;
+            Window window = activity.getWindow();
+            setFrameRate(window, 60);
+        } else {
+            Debug.i().log(Log.ERROR, "failed to set frame rate, isAttachedToWindow() == false, how?");
+            Toast.makeText(getContext(), "Failed to set frame rate, view logs for details", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void start() {
