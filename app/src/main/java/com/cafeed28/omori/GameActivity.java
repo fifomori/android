@@ -44,7 +44,7 @@ public class GameActivity extends Activity {
             button.setListener(pressed -> mWebView.dispatchButton(entry.getValue(), pressed));
         }
 
-        final CharSequence[] menuItems = new CharSequence[] {"Toggle FPS counter", "Quit game"};
+        final CharSequence[] menuItems = new CharSequence[] {"Toggle FPS counter", "Toggle touch input", "Quit game"};
 
         mMenuDialog = new AlertDialog.Builder(this)
                 .setTitle("Menu")
@@ -53,7 +53,10 @@ public class GameActivity extends Activity {
                         case 0: // Toggle FPS counter
                             mWebView.eval("Graphics._toggleFPSCounter();");
                             break;
-                        case 1: // Quit game
+                        case 1: // Toggle touch input
+                            mWebView.eval("nwcompat.touchInputEnabled = !nwcompat.touchInputEnabled;");
+                            break;
+                        case 2: // Quit game
                             mQuitDialog.show();
                             break;
                     }
