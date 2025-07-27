@@ -79,8 +79,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
             String[] pathSections = uriPath.split(":");
             String directory = Environment.getExternalStorageDirectory().getPath() + "/" + pathSections[pathSections.length - 1];
-            mPreferences.edit().putString(PREFERENCE_DIRECTORY, directory).apply();
 
+            if (!Files.exists(Paths.get(directory, "index.html"))) {
+                Toast.makeText(context, "Selected directory is not a game directory (index.html not found)", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            mPreferences.edit().putString(PREFERENCE_DIRECTORY, directory).apply();
             updatePreferences(mPreferences);
         });
 
