@@ -1,13 +1,17 @@
 package com.cafeed28.omori;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.net.Uri;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.view.Window;
 import android.webkit.ConsoleMessage;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
@@ -15,6 +19,7 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -51,6 +56,43 @@ public class OmoWebView extends WebView {
         this(context, attrs, defStyleAttr, 0);
     }
 
+    private void setFrameRate(Window window, int frameRate) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            setRequestedFrameRate(frameRate);
+            return;
+        }
+
+        Display display = window.getWindowManager().getDefaultDisplay();
+        if (Math.floor(display.getRefreshRate()) == frameRate) {
+            return;
+        }
+
+        Display.Mode currentMode = display.getMode();
+        Debug.i().log(Log.INFO, "current mode: %s", currentMode);
+
+        Display.Mode targetMode = null;
+        for (Display.Mode mode : display.getSupportedModes()) {
+            Debug.i().log(Log.INFO, "mode: %s", mode.toString());
+
+            boolean sameResolutionMode = currentMode.getPhysicalWidth() == mode.getPhysicalWidth()
+                    && currentMode.getPhysicalHeight() == mode.getPhysicalHeight();
+            if (sameResolutionMode && Math.floor(mode.getRefreshRate()) == frameRate) {
+                if (targetMode != null) { // should never happen probably
+                    Debug.i().log(Log.WARN, "targetMode != null, but found another suitable mode");
+                    Debug.i().log(Log.WARN, "targetMode: %s", targetMode.toString());
+                    Debug.i().log(Log.WARN, "mode: %s", mode.toString());
+                    Toast.makeText(getContext(), "Found multiple suitable display modes, view logs for details", Toast.LENGTH_LONG).show();
+                }
+                targetMode = mode;
+            }
+        }
+
+        if (targetMode != null) {
+            Debug.i().log(Log.INFO, "targetMode(%d): %s", targetMode.getModeId(), targetMode);
+            window.getAttributes().preferredDisplayModeId = targetMode.getModeId();
+        }
+    }
+
     @SuppressLint("SetJavaScriptEnabled")
     public OmoWebView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
@@ -78,6 +120,15 @@ public class OmoWebView extends WebView {
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         settings.setLoadsImagesAutomatically(true);
         settings.setMediaPlaybackRequiresUserGesture(false);
+
+        if (context instanceof Activity) {
+            Activity activity = (Activity) context;
+            Window window = activity.getWindow();
+            setFrameRate(window, 60);
+        } else {
+            Debug.i().log(Log.ERROR, "failed to set frame rate, isAttachedToWindow() == false, how?");
+            Toast.makeText(getContext(), "Failed to set frame rate, view logs for details", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void start() {
