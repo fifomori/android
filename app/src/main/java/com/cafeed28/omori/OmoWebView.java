@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.net.Uri;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
@@ -57,11 +56,6 @@ public class OmoWebView extends WebView {
     }
 
     private void setFrameRate(Window window, int frameRate) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-            setRequestedFrameRate(frameRate);
-            return;
-        }
-
         Display display = window.getWindowManager().getDefaultDisplay();
         if (Math.floor(display.getRefreshRate()) == frameRate) {
             return;
