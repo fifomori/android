@@ -98,15 +98,15 @@ public class GameActivity extends Activity {
         hideSystemUI();
 
         if (mWebView != null) {
-            mWebView.resumeTimers();
             mWebView.onResume();
+            mWebView.eval("window.nw.Window.get().dispatchEvent(new Event('restore'));");
         }
     }
 
     @Override
     protected void onPause() {
         if (mWebView != null) {
-            mWebView.pauseTimers();
+            mWebView.eval("window.nw.Window.get().dispatchEvent(new Event('minimize'));");
             mWebView.onPause();
         }
 
