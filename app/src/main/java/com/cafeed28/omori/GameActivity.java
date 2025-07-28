@@ -54,7 +54,7 @@ public class GameActivity extends Activity {
                             mWebView.eval("Graphics._toggleFPSCounter();");
                             break;
                         case 1: // Toggle touch input
-                            mWebView.eval("nwcompat.touchInputEnabled = !nwcompat.touchInputEnabled;");
+                            mWebView.eval("TouchInput._toggleTouchInput();");
                             break;
                         case 2: // Quit game
                             mQuitDialog.show();
