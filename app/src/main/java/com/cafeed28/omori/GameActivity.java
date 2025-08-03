@@ -35,12 +35,13 @@ public class GameActivity extends Activity {
         SharedPreferences preferences = application.getPreferences();
         float opacityPressed = preferences.getInt(getString(R.string.preference_opacity_pressed), 100) / 100.f;
         float opacityReleased = preferences.getInt(getString(R.string.preference_opacity_released), 25) / 100.f;
+        int buttonSize = preferences.getInt(getString(R.string.preference_button_size), -1);
         int alphaPressed = (int)(255 * opacityPressed);
         int alphaReleased = (int)(255 * opacityReleased);
 
         for (var entry : NwCompat.ID_BUTTON_MAPPER.entrySet()) {
             ButtonView button = findViewById(entry.getKey());
-            button.setParams(alphaPressed, alphaReleased);
+            button.setParams(alphaPressed, alphaReleased, buttonSize);
             button.setListener(pressed -> mWebView.dispatchButton(entry.getValue(), pressed));
         }
 

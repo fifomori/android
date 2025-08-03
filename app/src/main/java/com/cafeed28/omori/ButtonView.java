@@ -11,6 +11,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -28,13 +29,14 @@ public class ButtonView extends View {
     private final Drawable mDrawableReleased;
     private final Drawable mDrawableContent;
 
-    private final int mSize;
-    private final Rect mRect;
-    private final Rect mContentRect;
+    private int mSize;
+    private final int mInsetFactor;
+    private Rect mRect;
+    private Rect mContentRect;
 
     private boolean mPressed;
     private int mAlphaPressed;
-    private int mAlphaReleased;
+    private int mAlphaReleased = 255;
 
     private Paint mPaint = new Paint();
 
@@ -62,16 +64,8 @@ public class ButtonView extends View {
             mDrawableContent = a.getDrawable(R.styleable.ButtonView_drawableContent);
 
             mSize = a.getDimensionPixelSize(R.styleable.ButtonView_buttonSize, 48);
-            int inset = mSize / a.getInteger(R.styleable.ButtonView_insetFactor, 3);
-
-            mRect = new Rect(0, 0, mSize, mSize);
-            mDrawablePressed.setBounds(mRect);
-            mDrawableReleased.setBounds(mRect);
-
-            mContentRect = new Rect(inset, inset, mSize - inset, mSize - inset);
-            if (mDrawableContent != null) {
-                mDrawableContent.setBounds(mContentRect);
-            }
+            mInsetFactor = a.getInteger(R.styleable.ButtonView_insetFactor, 3);
+            recomputeSizeDependents();
         }
 
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);
@@ -79,12 +73,32 @@ public class ButtonView extends View {
         mPaint.setAntiAlias(true);
     }
 
-    public void setParams(int alphaPressed, int alphaReleased) {
+    private void recomputeSizeDependents() {
+        int inset = mSize / mInsetFactor;
+        mRect = new Rect(0, 0, mSize, mSize);
+
+        mDrawablePressed.setBounds(mRect);
+        mDrawableReleased.setBounds(mRect);
+        mContentRect = new Rect(inset, inset, mSize - inset, mSize - inset);
+        if (mDrawableContent != null) {
+            mDrawableContent.setBounds(mContentRect);
+        }
+
+        requestLayout();
+        invalidate();
+    }
+
+    public void setParams(int alphaPressed, int alphaReleased, int buttonSize) {
         mAlphaPressed = alphaPressed;
         mAlphaReleased = alphaReleased;
 
         mDrawablePressed.setAlpha(mAlphaPressed);
         mDrawableReleased.setAlpha(mAlphaReleased);
+
+        if (buttonSize != -1) {
+            mSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, buttonSize, getResources().getDisplayMetrics());
+            recomputeSizeDependents();
+        }
     }
 
     @Override

@@ -1,33 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory android:title="General">
         <Preference
             android:key="@string/preference_directory"
             android:title="Select installation directory" />
         <EditTextPreference
             android:key="@string/preference_key"
-            android:title="Enter decryption key"
             android:selectAllOnFocus="true"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:title="Enter decryption key" />
         <SwitchPreference
-            android:key="@string/preference_oneloader"
+            android:defaultValue="false"
             android:dependency="@string/preference_directory"
-            android:title="Enable OneLoader"
-            android:defaultValue="false" />
+            android:key="@string/preference_oneloader"
+            android:title="Enable OneLoader" />
     </PreferenceCategory>
     <PreferenceCategory android:title="Controls">
         <SeekBarPreference
+            android:defaultValue="100"
             android:key="@string/preference_opacity_pressed"
             android:title="Pressed button opacity"
             android:max="100"
-            android:defaultValue="100"
             app:showSeekBarValue="true" />
         <SeekBarPreference
+            android:defaultValue="25"
             android:key="@string/preference_opacity_released"
             android:title="Released button opacity"
             android:max="100"
-            android:defaultValue="25"
+            app:showSeekBarValue="true" />
+        <SeekBarPreference
+            android:defaultValue="56"
+            android:key="@string/preference_button_size"
+            android:title="Button size"
+            android:max="64"
+            app:min="32"
+            app:showSeekBarValue="true" />
+        <SeekBarPreference
+            android:defaultValue="0"
+            android:key="@string/preference_gamepad_insets"
+            android:title="Gamepad insets"
+            android:max="100"
             app:showSeekBarValue="true" />
     </PreferenceCategory>
     <PreferenceCategory android:title="Debug">
@@ -36,7 +49,7 @@
             android:title="Save debug logs" />
         <Preference
             android:key="@string/preference_logs_clear"
-            android:title="Clear debug logs"
-            android:summary="App restart is needed" />
+            android:summary="App restart is needed"
+            android:title="Clear debug logs" />
     </PreferenceCategory>
 </PreferenceScreen>
