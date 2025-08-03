@@ -10,11 +10,11 @@ import android.widget.GridLayout;
 
 public class ButtonGroupView extends GridLayout {
     public ButtonGroupView(Context context) {
-        this(context, null, 0, 0);
+        this(context, null);
     }
 
     public ButtonGroupView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0, 0);
+        this(context, attrs, 0);
     }
 
     public ButtonGroupView(Context context, AttributeSet attrs, int defStyleAttr) {

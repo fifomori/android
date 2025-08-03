@@ -45,11 +45,11 @@ public class ButtonView extends View {
     }
 
     public ButtonView(Context context) {
-        this(context, null, 0, 0);
+        this(context, null);
     }
 
     public ButtonView(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0, 0);
+        this(context, attrs, 0);
     }
 
     public ButtonView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {

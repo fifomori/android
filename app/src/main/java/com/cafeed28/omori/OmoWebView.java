@@ -44,49 +44,15 @@ public class OmoWebView extends WebView {
     }
 
     public OmoWebView(Context context) {
-        this(context, null, 0, 0);
+        this(context, null);
     }
 
     public OmoWebView(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0, 0);
+        this(context, attrs, 0);
     }
 
     public OmoWebView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, 0);
-    }
-
-    private void setFrameRate(Window window, int frameRate) {
-        Display display = window.getWindowManager().getDefaultDisplay();
-        if (Math.floor(display.getRefreshRate()) == frameRate) {
-            return;
-        }
-
-        Display.Mode currentMode = display.getMode();
-        Debug.i().log(Log.INFO, "current mode: %s", currentMode);
-
-        Display.Mode targetMode = null;
-        for (Display.Mode mode : display.getSupportedModes()) {
-            Debug.i().log(Log.INFO, "mode: %s", mode.toString());
-
-            boolean sameResolutionMode = currentMode.getPhysicalWidth() == mode.getPhysicalWidth()
-                    && currentMode.getPhysicalHeight() == mode.getPhysicalHeight();
-            if (sameResolutionMode && Math.floor(mode.getRefreshRate()) == frameRate) {
-                if (targetMode != null) { // should never happen probably
-                    Debug.i().log(Log.WARN, "targetMode != null, but found another suitable mode");
-                    Debug.i().log(Log.WARN, "targetMode: %s", targetMode.toString());
-                    Debug.i().log(Log.WARN, "mode: %s", mode.toString());
-                    Toast.makeText(getContext(), "Found multiple suitable display modes, view logs for details", Toast.LENGTH_LONG).show();
-                }
-                targetMode = mode;
-            }
-        }
-
-        if (targetMode != null) {
-            Debug.i().log(Log.INFO, "targetMode(%d): %s", targetMode.getModeId(), targetMode);
-            var attributes = window.getAttributes();
-            attributes.preferredRefreshRate = targetMode.getRefreshRate();
-            window.setAttributes(attributes);
-        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -136,6 +102,40 @@ public class OmoWebView extends WebView {
                 .toString();
 
         loadUrl(url);
+    }
+
+    private void setFrameRate(Window window, int frameRate) {
+        Display display = window.getWindowManager().getDefaultDisplay();
+        if (Math.floor(display.getRefreshRate()) == frameRate) {
+            return;
+        }
+
+        Display.Mode currentMode = display.getMode();
+        Debug.i().log(Log.INFO, "current mode: %s", currentMode);
+
+        Display.Mode targetMode = null;
+        for (Display.Mode mode : display.getSupportedModes()) {
+            Debug.i().log(Log.INFO, "mode: %s", mode.toString());
+
+            boolean sameResolutionMode = currentMode.getPhysicalWidth() == mode.getPhysicalWidth()
+                    && currentMode.getPhysicalHeight() == mode.getPhysicalHeight();
+            if (sameResolutionMode && Math.floor(mode.getRefreshRate()) == frameRate) {
+                if (targetMode != null) { // should never happen probably
+                    Debug.i().log(Log.WARN, "targetMode != null, but found another suitable mode");
+                    Debug.i().log(Log.WARN, "targetMode: %s", targetMode.toString());
+                    Debug.i().log(Log.WARN, "mode: %s", mode.toString());
+                    Toast.makeText(getContext(), "Found multiple suitable display modes, view logs for details", Toast.LENGTH_LONG).show();
+                }
+                targetMode = mode;
+            }
+        }
+
+        if (targetMode != null) {
+            Debug.i().log(Log.INFO, "targetMode(%d): %s", targetMode.getModeId(), targetMode);
+            var attributes = window.getAttributes();
+            attributes.preferredRefreshRate = targetMode.getRefreshRate();
+            window.setAttributes(attributes);
+        }
     }
 
     public void dispatchButton(int button, boolean pressed) {
