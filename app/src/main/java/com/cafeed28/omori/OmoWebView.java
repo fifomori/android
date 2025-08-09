@@ -76,6 +76,8 @@ public class OmoWebView extends WebView {
         setLayerType(View.LAYER_TYPE_HARDWARE, null);
         setKeepScreenOn(true);
 
+        setOverScrollMode(OVER_SCROLL_NEVER);
+
         WebSettings settings = getSettings();
 
         settings.setJavaScriptEnabled(true);
