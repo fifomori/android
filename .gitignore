@@ -33,4 +33,3 @@ google-services.json
 *.hprof
 
 app/src/main/assets/*
-!app/src/main/assets/index*.html
