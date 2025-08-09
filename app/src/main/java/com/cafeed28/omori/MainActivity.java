@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         Button playButton = findViewById(R.id.button_play);
 
         ViewCompat.setOnApplyWindowInsetsListener(playButton, (v, windowInsets) -> {
-            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.mandatorySystemGestures());
             ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
             mlp.bottomMargin = insets.bottom;
             v.setLayoutParams(mlp);

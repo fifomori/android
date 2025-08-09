@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.ViewGroup;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
@@ -28,6 +30,20 @@ public class GameActivity extends Activity {
 
         mWebView = findViewById(R.id.webView);
         mWebView.setOnCloseWindowListener(this::finishAndRemoveTask);
+
+        ViewCompat.setOnApplyWindowInsetsListener(mWebView, (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.displayCutout());
+            ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+
+            // i fucking hate android
+            if (insets.left > 0) mlp.leftMargin = insets.left;
+            else if (insets.right > 0) mlp.rightMargin = insets.right;
+
+            v.setLayoutParams(mlp);
+
+            return WindowInsetsCompat.CONSUMED;
+        });
+
         mWebView.start();
 
         final CharSequence[] menuItems = new CharSequence[] {"Toggle FPS counter", "Toggle touch input", "Edit controls", "Quit game"};
