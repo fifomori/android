@@ -51,7 +51,13 @@ jobs:
         run: |
           mkdir -p android/app/src/main/assets/js
           cp nwcompat/nwcompat-loader-main.js android/app/src/main/assets/js/main.js
-          cp nwcompat/nwcompat.css nwcompat/nwcompat.js nwcompat/nwcompat-loader-oneloader.js nwcompat/dist/* android/app/src/main/assets
+          cp nwcompat/nwcompat.css \
+          nwcompat/nwcompat.js \
+          nwcompat/index.html \
+          nwcompat/index-oneloader.html \ 
+          nwcompat/nwcompat-loader-oneloader.js \
+          nwcompat/dist/* \
+          android/app/src/main/assets
 
       - name: Build apk
         env:
