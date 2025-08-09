@@ -39,10 +39,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public static String PREFERENCE_DIRECTORY;
     public static String PREFERENCE_KEY;
     public static String PREFERENCE_ONELOADER;
-    public static String PREFERENCE_OPACITY_PRESSED;
-    public static String PREFERENCE_OPACITY_RELEASED;
-    public static String PREFERENCE_BUTTON_SIZE;
-    public static String PREFERENCE_GAMEPAD_INSETS;
     public static String PREFERENCE_LOGS;
     public static String PREFERENCE_LOGS_CLEAR;
 
@@ -65,10 +61,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         PREFERENCE_DIRECTORY = getString(R.string.preference_directory);
         PREFERENCE_KEY = getString(R.string.preference_key);
         PREFERENCE_ONELOADER = getString(R.string.preference_oneloader);
-        PREFERENCE_OPACITY_PRESSED = getString(R.string.preference_opacity_pressed);
-        PREFERENCE_OPACITY_RELEASED = getString(R.string.preference_opacity_released);
-        PREFERENCE_BUTTON_SIZE = getString(R.string.preference_button_size);
-        PREFERENCE_GAMEPAD_INSETS = getString(R.string.preference_gamepad_insets);
         PREFERENCE_LOGS = getString(R.string.preference_logs);
         PREFERENCE_LOGS_CLEAR = getString(R.string.preference_logs_clear);
 

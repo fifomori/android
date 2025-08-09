@@ -16,33 +16,6 @@
             android:key="@string/preference_oneloader"
             android:title="Enable OneLoader" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="Controls">
-        <SeekBarPreference
-            android:defaultValue="100"
-            android:key="@string/preference_opacity_pressed"
-            android:title="Pressed button opacity"
-            android:max="100"
-            app:showSeekBarValue="true" />
-        <SeekBarPreference
-            android:defaultValue="25"
-            android:key="@string/preference_opacity_released"
-            android:title="Released button opacity"
-            android:max="100"
-            app:showSeekBarValue="true" />
-        <SeekBarPreference
-            android:defaultValue="56"
-            android:key="@string/preference_button_size"
-            android:title="Button size"
-            android:max="64"
-            app:min="32"
-            app:showSeekBarValue="true" />
-        <SeekBarPreference
-            android:defaultValue="0"
-            android:key="@string/preference_gamepad_insets"
-            android:title="Gamepad insets"
-            android:max="100"
-            app:showSeekBarValue="true" />
-    </PreferenceCategory>
     <PreferenceCategory android:title="Debug">
         <Preference
             android:key="@string/preference_logs"

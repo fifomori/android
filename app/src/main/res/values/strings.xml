@@ -5,10 +5,6 @@
     <string name="preference_key">key</string>
     <string name="preference_directory">directory</string>
     <string name="preference_oneloader">oneloader</string>
-    <string name="preference_opacity_pressed">opacity_pressed</string>
-    <string name="preference_opacity_released">opacity_released</string>
-    <string name="preference_button_size">button_size</string>
-    <string name="preference_gamepad_insets">gamepad_insets</string>
     <string name="preference_logs">logs</string>
     <string name="preference_logs_clear">logs_clear</string>
 </resources>
