@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -74,6 +75,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             if (uriPath == null) return;
 
             String[] pathSections = uriPath.split(":");
+            Debug.i().log(Log.INFO, "selected directory: %s", uriPath);
             String directory = Environment.getExternalStorageDirectory().getPath() + "/" + pathSections[pathSections.length - 1];
 
             if (!Files.exists(Paths.get(directory, "index.html"))) {
