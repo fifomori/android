@@ -1,8 +1,13 @@
 package com.cafeed28.omori;
 
+import static android.view.InputDevice.SOURCE_GAMEPAD;
+import static android.view.InputDevice.SOURCE_JOYSTICK;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.ViewGroup;
 
 import androidx.appcompat.app.AlertDialog;
@@ -121,5 +126,30 @@ public class GameActivity extends Activity {
     @Override
     public void onBackPressed() {
         mMenuDialog.show();
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.isFromSource(SOURCE_GAMEPAD)) {
+            int keyCode = event.getKeyCode();
+            if (keyCode == KeyEvent.KEYCODE_BUTTON_MODE) {
+                if (event.getAction() == KeyEvent.ACTION_UP) {
+                    onBackPressed();
+                }
+            } else {
+                mWebView.dispatchKeyEvent(event);
+            }
+            return true;
+        }
+        return super.dispatchKeyEvent(event);
+    }
+
+    @Override
+    public boolean dispatchGenericMotionEvent(MotionEvent event) {
+        if (event.isFromSource(SOURCE_JOYSTICK)) {
+            mWebView.dispatchGenericMotionEvent(event);
+            return true;
+        }
+        return super.dispatchGenericMotionEvent(event);
     }
 }

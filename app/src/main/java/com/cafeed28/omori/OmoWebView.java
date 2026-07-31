@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -140,17 +141,16 @@ public class OmoWebView extends WebView {
         }
     }
 
-    public void dispatchButton(int button, boolean pressed) {
-        eval("nwcompat.gamepad.buttons[%d].pressed = %b;", button, pressed);
-    }
-
-    public void dispatchAxis(int axis, double value) {
-        eval("nwcompat.gamepad.axes[%d] = %f", axis, value);
-    }
-
     public void eval(String format, Object... args) {
         String code = String.format(Locale.ENGLISH, format, args);
         evaluateJavascript(code, null);
+    }
+
+    // not sure if it's actually needed but here just in case
+    @Override
+    protected void onFocusChanged(boolean focused, int direction, Rect previouslyFocusedRect) {
+        if (!focused) requestFocus();
+        super.onFocusChanged(focused, direction, previouslyFocusedRect);
     }
 
     private class ViewClient extends WebViewClient {
